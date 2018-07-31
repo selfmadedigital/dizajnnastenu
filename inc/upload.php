@@ -18,7 +18,7 @@
 	}
 
 	if ($success) {
-	$output = array("success" => true, "message" => "Success!");
+		$output = array("success" => true, "message" => "Success!");
 	} else {
 		$output = array("success" => false, "error" => "Failure!");
 	}

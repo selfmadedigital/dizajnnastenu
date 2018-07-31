@@ -56,6 +56,8 @@ function changePage(page, nameid) {
 	      data: data,
 	      success: function(data) {
 	      	productData = data;
+	      	productData['selected-material'] = 0;
+	      	productData['selected-shipping'] = 0;
 
 	        $('#product-name h1').text(data['name']);
 	        $('#product-image').append('<img src="/img/' + data['img'] + '" alt="' + data['name'] + '" />');
@@ -156,7 +158,7 @@ function changePage(page, nameid) {
 								labelString: 'Cena'
 							},
 							ticks: {
-			                    beginAtZero:true
+			                    beginAtZero:false
 			                }
 						}]
 					}
@@ -556,6 +558,7 @@ function selectMaterial(id){
 	$('#product-material-group label small').text('(+' + material_price + '€/m2)');
 	$('#material-price').val(material_price);
 	updatePriceCalculation();
+	productData['selected-material'] = id;
 	closePopup();
 }
 
@@ -575,6 +578,7 @@ function selectShipping(index){
 	}
 
 	updatePriceCalculation();
+	productData['selected-shipping'] = shipping['id'];
 }
 
 function selectInstallation(requested){
@@ -655,10 +659,32 @@ function openOrderForm(){
 		e.preventDefault();
 
 	    if(validateOrderForm()){
+	    	
+	    	var orderdata = {};
+	    	$.each($('#order-form').serializeArray(), function(_, kv) {
+			  orderdata[kv.name] = kv.value;
+			});
+	    	
+	    	orderdata['product'] = productData['name'];
+	    	orderdata['width'] = $('#input-width').val();
+	    	orderdata['height'] = $('#input-height').val();
+	    	orderdata['quantity'] = $('#input-quantity').val();
+	    	orderdata['finalisation_id'] = '0';
+	    	orderdata['material_id'] = productData['selected-material'];
+	    	orderdata['shipping_id'] = productData['selected-shipping'];
+	    	orderdata['total_price'] = $('#product-price-total').text();
+	    	orderdata['attachment'] = $('#attached-file').val();
+	    	
+	    	if($('#product-installation').text() == 0){
+	    		orderdata['installation'] = 0;
+	    	}else{
+	    		orderdata['installation'] = 1;
+	    	}
+	    	
 		    $.ajax({
 		        type: "POST",
 		        url: "/inc/order.php",
-		        data: $("#order-form").serialize(),
+		        data: orderdata,
 		        success: function(data){
 		            console.log(data);
 		            $('#order-button span').removeClass("icon-cart");

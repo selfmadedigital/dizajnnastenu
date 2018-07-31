@@ -1,9 +1,8 @@
 <?php
 	require_once("db.php");
 	header('Content-Type: application/json; charset=utf-8');
-
-
-	echo json_encode($_POST);
+	$db->query("INSERT INTO orders (product_name, width, height, quantity, finalisation_id, installation, material_id, shipping_id, name, surname, email, telephone, address, psc, city, shipping_address, shipping_psc, shipping_city, additional_info, attachment, total_price, created, status) VALUES ('".$_POST['product']."','".$_POST['width']."','".$_POST['height']."','".$_POST['quantity']."','".$_POST['finalisation_id']."','".$_POST['installation']."','".$_POST['material_id']."','".$_POST['shipping_id']."','".$_POST['name']."','".$_POST['surname']."','".$_POST['email']."','".$_POST['telephone']."','".$_POST['address']."','".$_POST['psc']."','".$_POST['city']."','".$_POST['shipping_address']."','".$_POST['shipping_psc']."','".$_POST['shipping_city']."','".$_POST['additional_info']."','".$_POST['attachment']."','".$_POST['total_price']."',NOW(),'3')");
+	
 // Import PHPMailer classes into the global namespace
 // // These must be at the top of your script, not inside a function
 // use PHPMailer\PHPMailer\PHPMailer;

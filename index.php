@@ -128,6 +128,7 @@
 				      			</div>
 				      		</div>
 				      		<label class="btn-color btn-file btn-bottom text-center" id="import-button">
+				      			<input type="hidden" id="attached-file" />
 							    <input type="file" name="file"/>
 							    <span class="icon-import"></span>Priložiť súbor
 							</label>
