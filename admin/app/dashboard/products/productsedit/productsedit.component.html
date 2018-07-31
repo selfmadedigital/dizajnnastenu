@@ -1,0 +1,368 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form novalidate>
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Úprava produktu</h4>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Krátke informácie
+                                    <span class="star">*</span>
+                                </label>
+                                <textarea id="short_information"></textarea>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Dlhé informácie
+                                    <span class="star">*</span>
+                                </label>
+                                <textarea id="long_information"></textarea>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Popis
+                                    <span class="star">*</span>
+                                </label>
+                                <textarea id="description"></textarea>
+                            </div>
+                            <div id="colorpicker" class="input-group label-floating colorpicker-component">
+                                <label class="control-label">
+                                    Farba
+                                    <span class="star">*</span>
+                                </label>
+                                <input type="text" value="#000000" class="form-control" id="color" />
+                                <span class="input-group-addon"><i></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">image</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Obrázok</h4>
+                            
+                            <div class="form-group label-floating">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" id="product-image-upload">
+                                        
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                    <div>
+                                        <span class="btn btn-rose btn-round btn-file">
+                                            <span class="fileinput-new">Vybrať</span>
+                                        <span class="fileinput-exists">Zmeniť</span>
+                                        <input type="file" id="product-image" name="product-image" ng-model="data.image" />
+                                        </span>
+                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Odstrániť</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Materiál</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="materials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Náhľad</th>
+                                            <th>Názov</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let material of materials" id="material-{{material.id}}">
+                                            <td class="img-container">
+                                                <img alt="{{material.name}}" src="/img/{{material.img}}"></td>
+                                            <td>{{material.name}}</td>
+                                            <td class="td-actions text-right">
+                                                <label class="btn btn-success">
+                                                    <i class="material-icons">add_a_photo</i>
+                                                    <input type="file" class="material-image" data-id="{{material.id}}" name="filter-image" style="display: none;" (change)="imageUploaded($event)">
+                                                </label>
+                                                <button type="button" rel="tooltip" class="btn btn-info" (click)="selectMaterial(material.id)">
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </button>
+                                                <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeMaterial(material.id, material.name)">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="form-group label-floating c">
+                                            <label class="control-label">
+                                                Názov
+                                            </label>
+                                            <input class="form-control" id="new-material" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createMaterial()">Pridať nový materiál</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="material-price-card" style="display:none;">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Cenotvorba pre zvolený materiál</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="material-price-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rozmer</th>
+                                            <th>Cena</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Rozmer (m<sup>2</sup>)
+                                            </label>
+                                            <input class="form-control" id="new-material-price-size" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Cena (&euro;)
+                                            </label>
+                                            <input class="form-control" id="new-material-price-price" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('material-price')">Pridať hranicu ceny</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Cenotvorba</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="price-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rozmer</th>
+                                            <th>Cena</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let price of prices" id="price-{{price.id}}">
+                                            <td>{{price.size}} <small>m<sup>2</sup></small></td>
+                                            <td>{{price.price}} <small>&euro;</small></td>
+                                            <td class="td-actions text-right">
+                                                <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeprice(price.id, price.size)">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Rozmer (m<sup>2</sup>)
+                                            </label>
+                                            <input class="form-control" id="new-price-size" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Cena (&euro;)
+                                            </label>
+                                            <input class="form-control" id="new-price-price" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('price')">Pridať hranicu ceny</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Množstevná zľava</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="discounts-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Množstvo</th>
+                                            <th>Zľava</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let discount of discounts" id="discount-{{discount.id}}">
+                                            <td>{{discount.quantity}} <small>ks</small></td>
+                                            <td>{{discount.discount}} <small>%</small></td>
+                                            <td class="td-actions text-right">
+                                                <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeDiscount(discount.id, discount.quantity)">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Množstvo (ks)
+                                            </label>
+                                            <input class="form-control" id="new-discount_quantity" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Zľava (%)
+                                            </label>
+                                            <input class="form-control" id="new-discount_percentage" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createDiscount()">Pridať hranicu zľavy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Inštalácia</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="installations-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rozmer</th>
+                                            <th>Cena</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let installation of installations" id="installation-{{installation.id}}">
+                                            <td>{{installation.size}} <small>m<sup>2</sup></small></td>
+                                            <td>{{installation.price}} <small>&euro;</small></td>
+                                            <td class="td-actions text-right">
+                                                <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeInstallation(installation.id, installation.size)">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Rozmer (m<sup>2</sup>)
+                                            </label>
+                                            <input class="form-control" id="new-installation_size" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Cena (&euro;)
+                                            </label>
+                                            <input class="form-control" id="new-installation_price" type="text" required="true" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createInstallation()">Pridať hranicu ceny</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Finalizácia</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="installation-table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        
+                                    </div>
+                                    <div class="col-md-5">
+                                        
+                                    </div>
+                                    <div class="col-md-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill">Pridať</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-footer text-right">
+                        <button type="button" class="btn btn-rose btn-fill" (click)="onSubmitForm()">Hotovo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

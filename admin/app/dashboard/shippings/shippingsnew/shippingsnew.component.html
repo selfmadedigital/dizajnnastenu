@@ -1,0 +1,62 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form novalidate (ngSubmit)="onSubmit()">
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">list</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Atribúty</h4>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Názov
+                                    <span class="star">*</span>
+                                </label>
+                                <input class="form-control" id="shipping_name" type="text" required="true" ng-model="data.name" />
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Cena
+                                    <span class="star">*</span>
+                                </label>
+                                <input class="form-control" id="shipping_price" type="text" required="true" ng-model="data.price" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">image</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Obrázok</h4>
+                            
+                            <div class="form-group label-floating">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" id="shipping-image-upload">
+                                        <img src="/img/shipping/default.jpg" alt="...">
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                    <div>
+                                        <span class="btn btn-rose btn-round btn-file">
+                                            <span class="fileinput-new">Vybrať</span>
+                                        <span class="fileinput-exists">Zmeniť</span>
+                                        <input type="file" accept="image/*" id="shipping-image" name="shipping-image" ng-model="data.image" />
+                                        </span>
+                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Odstrániť</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-footer text-right">
+                        <button type="button" (click)="onSubmit()" class="btn btn-rose btn-fill">Vytvoriť</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

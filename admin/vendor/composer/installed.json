@@ -1,0 +1,251 @@
+[
+    {
+        "name": "delight-im/http",
+        "version": "v2.0.0",
+        "version_normalized": "2.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/delight-im/PHP-HTTP.git",
+            "reference": "0a19a72a7eac8b1301aa972fb20cff494ac43e09"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/delight-im/PHP-HTTP/zipball/0a19a72a7eac8b1301aa972fb20cff494ac43e09",
+            "reference": "0a19a72a7eac8b1301aa972fb20cff494ac43e09",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2016-07-21T15:05:01+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Delight\\Http\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Hypertext Transfer Protocol (HTTP) utilities for PHP",
+        "homepage": "https://github.com/delight-im/PHP-HTTP",
+        "keywords": [
+            "headers",
+            "http",
+            "https"
+        ]
+    },
+    {
+        "name": "delight-im/cookie",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/delight-im/PHP-Cookie.git",
+            "reference": "04cd3db4f42940cb9c1a6ab2eebdcbe41f642f76"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/delight-im/PHP-Cookie/zipball/04cd3db4f42940cb9c1a6ab2eebdcbe41f642f76",
+            "reference": "04cd3db4f42940cb9c1a6ab2eebdcbe41f642f76",
+            "shasum": ""
+        },
+        "require": {
+            "delight-im/http": "^2.0",
+            "php": ">=5.4.0"
+        },
+        "time": "2017-10-14T04:23:01+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Delight\\Cookie\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Modern cookie management for PHP",
+        "homepage": "https://github.com/delight-im/PHP-Cookie",
+        "keywords": [
+            "cookie",
+            "cookies",
+            "csrf",
+            "http",
+            "same-site",
+            "samesite",
+            "xss"
+        ]
+    },
+    {
+        "name": "delight-im/auth",
+        "version": "v3.1.0",
+        "version_normalized": "3.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/delight-im/PHP-Auth.git",
+            "reference": "d527a82bfa434617a9b96525eac5e62621e27e91"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/delight-im/PHP-Auth/zipball/d527a82bfa434617a9b96525eac5e62621e27e91",
+            "reference": "d527a82bfa434617a9b96525eac5e62621e27e91",
+            "shasum": ""
+        },
+        "require": {
+            "delight-im/cookie": "^2.0",
+            "ext-openssl": "*",
+            "php": ">=5.5.0"
+        },
+        "time": "2016-08-20T20:02:18+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Delight\\Auth\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "Authentication for PHP. Simple, lightweight and secure.",
+        "homepage": "https://github.com/delight-im/PHP-Auth",
+        "keywords": [
+            "Authentication",
+            "auth",
+            "login",
+            "security"
+        ]
+    },
+    {
+        "name": "simple-crud/simple-crud",
+        "version": "v6.12.1",
+        "version_normalized": "6.12.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/oscarotero/simple-crud.git",
+            "reference": "2ba6ce5cf55c3f6c4f238186ec43b20875fcf22a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/2ba6ce5cf55c3f6c4f238186ec43b20875fcf22a",
+            "reference": "2ba6ce5cf55c3f6c4f238186ec43b20875fcf22a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.5",
+            "zendframework/zend-diactoros": "^1.3"
+        },
+        "time": "2018-03-08T14:53:55+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "SimpleCrud\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Oscar Otero",
+                "email": "oom@oscarotero.com",
+                "homepage": "http://oscarotero.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "Create/Read/Update/Delete easily",
+        "homepage": "https://github.com/oscarotero/simple-crud",
+        "keywords": [
+            "crud",
+            "mysql",
+            "sqlite"
+        ]
+    },
+    {
+        "name": "components/jquery",
+        "version": "3.3.1",
+        "version_normalized": "3.3.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/components/jquery.git",
+            "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/components/jquery/zipball/459648cda77875519c5da3ae1dd0ed5d170aa649",
+            "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649",
+            "shasum": ""
+        },
+        "time": "2018-03-04T13:23:48+00:00",
+        "type": "component",
+        "extra": {
+            "component": {
+                "scripts": [
+                    "jquery.js"
+                ],
+                "files": [
+                    "jquery.min.js",
+                    "jquery.min.map",
+                    "jquery.slim.js",
+                    "jquery.slim.min.js",
+                    "jquery.slim.min.map"
+                ]
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "JS Foundation and other contributors"
+            }
+        ],
+        "description": "jQuery JavaScript Library",
+        "homepage": "http://jquery.com"
+    },
+    {
+        "name": "itsjavi/bootstrap-colorpicker",
+        "version": "2.5.2",
+        "version_normalized": "2.5.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/farbelous/bootstrap-colorpicker.git",
+            "reference": "d56d0d3d5bee59904d48bce3c47a0029741e10e6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/farbelous/bootstrap-colorpicker/zipball/d56d0d3d5bee59904d48bce3c47a0029741e10e6",
+            "reference": "d56d0d3d5bee59904d48bce3c47a0029741e10e6",
+            "shasum": ""
+        },
+        "require": {
+            "components/jquery": ">=1.10"
+        },
+        "time": "2018-03-29T04:47:33+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache License Version 2.0"
+        ],
+        "authors": [
+            {
+                "name": "Javier Aguilar",
+                "homepage": "https://itsjavi.com"
+            }
+        ],
+        "description": "Fancy and customizable colorpicker plugin for Twitter Bootstrap"
+    }
+]

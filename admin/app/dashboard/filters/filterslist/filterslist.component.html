@@ -1,0 +1,46 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">format_indent_increase</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Filtre</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Náhľad</th>
+                                        <th>Názov</th>
+                                        <th>Atribút</th>
+                                        <th class="text-right">Akcie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let filter of filters" id="{{filter.id}}">
+                                        <td class="img-container">
+                                            <img src="/img/{{filter.img}}" alt="{{filter.name}}">
+                                        </td>
+                                        <td>{{filter.name}}</td>
+                                        <td>{{filter.attribute_title}}</td>
+                                        <td class="td-actions text-right">
+                                            <label class="btn btn-success">
+                                                <i class="material-icons">add_a_photo</i>
+                                                <input type="file" class="filter-image" data-id="{{filter.id}}" name="filter-image" style="display: none;" (change)="imageUploaded($event)">
+                                            </label>
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFilter(filter.id, filter.name)">
+                                               <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

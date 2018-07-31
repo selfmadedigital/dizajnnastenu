@@ -1,0 +1,48 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">image</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Inšpirácia</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Náhľad</th>
+                                        <th>Názov</th>
+                                        <th class="text-right">Akcie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let inspiration of inspirations" id="{{inspiration.id}}">
+                                        <td class="img-container">
+                                            <img src="/img/{{inspiration.img}}" alt="{{inspiration.name}}">
+                                        </td>
+                                        <td>{{inspiration.name}}</td>
+                                        <td class="td-actions text-right">
+                                            <a [routerLink]="['/inspiration/edit', inspiration.id]">
+                                                <button type="button" rel="tooltip" class="btn btn-success">
+                                                   <i class="material-icons">edit</i>
+                                                </button>
+                                            </a>
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeInspiration(inspiration.id, inspiration.name)">
+                                               <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                        <a href="#/inspiration/new"><button class="btn btn-rose btn-fill">Nová Inšpirácia</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

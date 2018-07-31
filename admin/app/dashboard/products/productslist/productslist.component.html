@@ -1,0 +1,42 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">apps</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Produkty</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Náhľad</th>
+                                        <th>Názov</th>
+                                        <th class="text-right">Akcie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let product of products">
+                                        <td class="img-container">
+                                            <img src="/img/{{product.img}}" alt="{{product.name}}">
+                                        </td>
+                                        <td [style.color]="'#' + product.color">{{product.name}}</td>
+                                        <td class="td-actions text-right">
+                                            <a [routerLink]="['/products/edit', product.name | lowercase]">
+                                                <button type="button" rel="tooltip" class="btn btn-success">
+                                                   <i class="material-icons">edit</i>
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

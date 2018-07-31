@@ -1,0 +1,94 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form novalidate>
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">list</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Atribúty</h4>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Názov
+                                    <span class="star">*</span>
+                                </label>
+                                <input class="form-control" id="blog_name" type="text" required="true" ng-model="data.name" />
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Krátky obsah
+                                    <span class="star">*</span>
+                                </label>
+                                <textarea id="short_content"></textarea>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">
+                                    Dlhý obsah
+                                    <span class="star">*</span>
+                                </label>
+                                <textarea id="long_content"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">image</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Obrázok</h4>
+                            
+                            <div class="form-group label-floating">
+                                <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                    <div class="fileinput-new thumbnail" id="blog-image-upload">
+                                        <img src="/img/blog/default.jpg" alt="...">
+                                    </div>
+                                    <div class="fileinput-preview fileinput-exists thumbnail"></div>
+                                    <div>
+                                        <span class="btn btn-rose btn-round btn-file">
+                                            <span class="fileinput-new">Vybrať</span>
+                                        <span class="fileinput-exists">Zmeniť</span>
+                                        <input type="file" id="blog-image" name="blog-image" ng-model="data.image" />
+                                        </span>
+                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Odstrániť</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">format_indent_increase</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Filtre</h4>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Produkt</label>
+                                <input type="text" id="filters-category" class="tagsinput" data-role="tagsinput" data-color="rose" ng-model="filter.product" placeholder="+ Filter" aria-label="+ Filter" />
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Miestnosť</label>
+                                <input type="text" id="filters-room" class="tagsinput" data-role="tagsinput" data-color="rose" ng-model="filter.room" placeholder="+ Filter" aria-label="+ Filter" />
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Farba</label>
+                                <input type="text" id="filters-color" class="tagsinput" data-role="tagsinput" data-color="rose" ng-model="filter.color" placeholder="+ Filter" aria-label="+ Filter" />
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Design</label>
+                                <input type="text" id="filters-design" class="tagsinput" data-role="tagsinput" data-color="rose" ng-model="filter.design" placeholder="+ Filter" aria-label="+ Filter" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-footer text-right">
+                        <button type="button" (click)="onSubmit()" class="btn btn-rose btn-fill">Upraviť</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

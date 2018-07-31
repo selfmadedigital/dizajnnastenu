@@ -1,0 +1,60 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Objednávky</h4>
+                        <div class="table-responsive">
+                            <table class="table" id="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Meno a Priezvisko</th>
+                                        <th>Produkt</th>
+                                        <th>Preprava</th>
+                                        <th>Cena</th>
+                                        <th>Dátum</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let order of orders" [ngStyle]="{'background-color': order.status_state == 0 ? '#fccac7' : 'transparent'}" id="{{order.id}}">
+                                        <td>{{order.name}} {{order.surname}}</td>
+                                        <td>{{order.product_name}}</td>
+                                        <td>{{order.shipping_name}}</td>
+                                        <td class="td-number">{{order.total_price}}<small>&euro;</small></td>
+                                        <td>{{order.date | date:'dd.MM.yyyy hh:mm'}}</td>
+                                        <td class="td-actions text-right">
+                                            <div class="dropdown" style="display: inline-block; width: 50%;">
+                                                <button href="#pablo" class="dropdown-toggle btn btn-info btn-round btn-block" data-toggle="dropdown">
+                                                    <span>{{order.status}}</span>
+                                                    <b class="caret"></b>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                    <li *ngFor="let state of orderstates">
+                                                        <a (click)="changeOrderState(order.id,state.id)">{{state.name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <a [routerLink]="['/orders/detail', order.id]">
+                                                <button type="button" rel="tooltip" class="btn btn-success">
+                                                   <i class="material-icons">remove_red_eye</i>
+                                                </button>
+                                            </a>
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeOrder(order.id)">
+                                               <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
