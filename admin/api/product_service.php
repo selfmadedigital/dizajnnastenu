@@ -29,12 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     
                 $resultprices = $db->query("SELECT * FROM material_prices WHERE material_id = '".$_GET['id']."' ORDER BY size");
                 while($rowprice = $resultprices->fetch_assoc()) {
-                    $mp = new MaterialPrice();
-                    $mp->id = $rowprice['id'];
-                    $mp->size = $rowprice['size'];
-                    $mp->price = $rowprice['price'];
-                        
-                    $material_prices[] = $mp;
+                    if(isset($_GET['format']) && $_GET['format'] == 'calculate'){
+                        $material_prices[$rowprice['size']] = $rowprice['price'];
+                    }else{
+                        $mp = new MaterialPrice();
+                        $mp->id = $rowprice['id'];
+                        $mp->size = $rowprice['size'];
+                        $mp->price = $rowprice['price'];
+                            
+                        $material_prices[] = $mp;
+                    }
                 }
                 
                 echo json_encode($material_prices);
@@ -44,11 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
                 $result = $db->query("SELECT * FROM product_prices WHERE UPPER(product_name) = UPPER('".$_GET['name']."') ORDER BY size");
                 while($row = $result->fetch_assoc()) {
-                    $price = new Price();
-                    $price->id = $row['id'];
-                    $price->size = $row['size'];
-                    $price->price = $row['price'];
-                    $prices[] = $price;
+                    if(isset($_GET['format']) && $_GET['format'] == 'calculate'){
+                        $prices[$row['size']] = $row['price'];
+                    }else{
+                        $price = new Price();
+                        $price->id = $row['id'];
+                        $price->size = $row['size'];
+                        $price->price = $row['price'];
+                        $prices[] = $price;
+                    }
                 }
                 
                 echo json_encode($prices);
@@ -58,11 +66,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
                 $result = $db->query("SELECT * FROM installation_prices WHERE UPPER(product_name) = UPPER('".$_GET['name']."') ORDER BY size");
                 while($row = $result->fetch_assoc()) {
-                    $price = new Price();
-                    $price->id = $row['id'];
-                    $price->size = $row['size'];
-                    $price->price = $row['price'];
-                    $prices[] = $price;
+                    if(isset($_GET['format']) && $_GET['format'] == 'calculate'){
+                        $prices[$row['size']] = $row['price'];
+                    }else{
+                        $price = new Price();
+                        $price->id = $row['id'];
+                        $price->size = $row['size'];
+                        $price->price = $row['price'];
+                        $prices[] = $price;
+                    }
                 }
                 
                 echo json_encode($prices);
@@ -72,11 +84,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
                 $result = $db->query("SELECT * FROM product_quantity_discount WHERE UPPER(product_name) = UPPER('".$_GET['name']."')");
                 while($row = $result->fetch_assoc()) {
-                    $discount = new Discount();
-                    $discount->id = $row['id'];
-                    $discount->quantity = $row['quantity'];
-                    $discount->discount = $row['discount'];
-                    $discounts[] = $discount;
+                    if(isset($_GET['format']) && $_GET['format'] == 'calculate'){
+                        $discounts[$row['quantity']] = $row['discount'];
+                    }else{
+                        $discount = new Discount();
+                        $discount->id = $row['id'];
+                        $discount->quantity = $row['quantity'];
+                        $discount->discount = $row['discount'];
+                        $discounts[] = $discount;
+                    }
                 }
                 
                 echo json_encode($discounts);

@@ -7,7 +7,7 @@
                         <i class="material-icons">attach_money</i>
                     </div>
                     <div class="card-content">
-                        <h4 class="card-title">Objednávka ID #</h4>
+                        <h4 class="card-title">Objednávka ID #<span id="oreder-id"></span></h4>
                         <ul class="timeline timeline-simple">
                             <li class="timeline-inverted">
                                 <div class="timeline-badge danger">
@@ -31,7 +31,7 @@
                                                 Materiál
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="product-material"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -39,7 +39,7 @@
                                                 Inštalácia
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="product-installation"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -47,7 +47,7 @@
                                                 Finalizácia
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="product-finalisation"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -55,7 +55,7 @@
                                                 Rozmer
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="product-size"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -63,7 +63,7 @@
                                                 Množstvo
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="product-quantity"></b>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                                                                 Meno
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-name"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -103,14 +103,14 @@
                                                                 Priezvisko
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-surname"></b>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="panel panel-default">
-                                                <div class="panel-heading" role="tab" id="headingTwo">
+                                                <div class="panel-heading" role="tab" id="heading-address">
                                                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                         <h4 class="panel-title">
                                                             Adresa
@@ -118,14 +118,14 @@
                                                         </h4>
                                                     </a>
                                                 </div>
-                                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-address">
                                                     <div class="panel-body">
                                                         <div class="row">
                                                             <label class="col-sm-2 col-form-label">
                                                                 Adresa
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-address"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -133,7 +133,7 @@
                                                                 PSČ
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-postcode"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -141,7 +141,7 @@
                                                                 Mesto
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-city"></b>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -149,21 +149,21 @@
                                             </div>
                                             <div class="panel panel-default">
                                                 <div class="panel-heading" role="tab" id="headingTwo">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAddress" aria-expanded="false" aria-controls="collapseTwo">
                                                         <h4 class="panel-title">
                                                             Adresa doručenia
                                                             <i class="material-icons">keyboard_arrow_down</i>
                                                         </h4>
                                                     </a>
                                                 </div>
-                                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                                <div id="collapseAddress" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                                     <div class="panel-body">
                                                         <div class="row">
                                                             <label class="col-sm-2 col-form-label">
                                                                 Adresa
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-delivery-address"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -171,7 +171,7 @@
                                                                 PSČ
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-delivery-postcode"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -179,7 +179,7 @@
                                                                 Mesto
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-delivery-city"></b>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -201,7 +201,7 @@
                                                                 Telefón
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-telephone"></b>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -209,7 +209,7 @@
                                                                 Email
                                                             </label>
                                                             <div class="col-sm-10">
-                                                                <b id="product-name"></b>
+                                                                <b id="customer-email"></b>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -233,7 +233,15 @@
                                                 Názov
                                             </label>
                                             <div class="col-sm-10">
-                                                <b id="product-name"></b>
+                                                <b id="shipping-name"></b>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label">
+                                                Cena
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <b id="shipping-price"></b>
                                             </div>
                                         </div>
                                     </div>
@@ -253,7 +261,7 @@
                                                 Základná cena / m2
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-base"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -261,7 +269,7 @@
                                                 Materiál / m2
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-material"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -269,7 +277,7 @@
                                                 Inštalácia / m2
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-installation"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -277,7 +285,7 @@
                                                 Finalizácia / m2
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-finalisation"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -285,7 +293,15 @@
                                                 Cena / ks
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-piece"></b>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label">
+                                                Zľava
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <b id="price-discount"></b>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -293,15 +309,15 @@
                                                 Preprava
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-shipping"></b>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <label class="col-sm-2 col-form-label">
-                                                Cena total
+                                                Cena celkom
                                             </label>
                                             <div class="col-sm-10">
-                                                <b>hello@creative-tim.com</b>
+                                                <b id="price-total"></b>
                                             </div>
                                         </div>
                                     </div>

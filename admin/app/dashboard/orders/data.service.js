@@ -24,6 +24,95 @@ var DataService = (function () {
     DataService.prototype.getStates = function () {
         return this.http.get("/admin/api/order_service.php?target=states").map(function (res) { return res.json(); });
     };
+    DataService.prototype.getProductPrices = function (product_name) {
+        return this.http.get("/admin/api/product_service.php?target=prices&name=" + product_name.toString()).map(function (res) { return res.json(); });
+    };
+    DataService.prototype.getQuantityDiscount = function (quantity, name) {
+        var data = {};
+        data['target'] = 'discounts';
+        data['name'] = name;
+        data['format'] = 'calculate';
+        var result = 0;
+        $.ajax({
+            type: "GET",
+            url: "/admin/api/product_service.php",
+            data: data,
+            async: false,
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    key = parseInt(key);
+                    value = parseFloat(value);
+                    if (quantity >= key && result < value) {
+                        result = value;
+                    }
+                });
+            }
+        });
+        return result;
+    };
+    DataService.prototype.calculatePrice = function (target, name, id, squaresize) {
+        var data = {};
+        data['target'] = target;
+        data['name'] = name;
+        data['id'] = id;
+        data['format'] = 'calculate';
+        var result = 0;
+        $.ajax({
+            type: "GET",
+            url: "/admin/api/product_service.php",
+            data: data,
+            async: false,
+            success: function (data) {
+                if (Object.keys(data).length > 0) {
+                    if (data[squaresize] !== undefined) {
+                        result = data[squaresize];
+                    }
+                    else {
+                        var max = 0;
+                        var min = Infinity;
+                        $.each(data, function (key, value) {
+                            key = parseFloat(key);
+                            if (key > max) {
+                                max = key;
+                            }
+                            if (key < min) {
+                                min = key;
+                            }
+                        });
+                        if (squaresize > max) {
+                            result = data[max];
+                        }
+                        else if (squaresize < min) {
+                            result = data[min];
+                        }
+                        else {
+                            var lower = 0;
+                            var greater = Infinity;
+                            $.each(data, function (key, value) {
+                                key = parseFloat(key);
+                                if (key > squaresize) {
+                                    if (key < greater) {
+                                        greater = key;
+                                    }
+                                }
+                                if (key < squaresize) {
+                                    if (key > lower) {
+                                        lower = key;
+                                    }
+                                }
+                            });
+                            var diff = parseFloat(data[lower.toFixed(2)]) - parseFloat(data[greater.toFixed(2)]);
+                            var div = diff / (greater - lower);
+                            result = parseFloat(data[lower.toFixed(2)]) - div * (squaresize - lower);
+                        }
+                    }
+                }
+            }, else: {
+                result: result
+            }
+        });
+        return result;
+    };
     DataService.prototype.removeOrder = function (id) {
         $.ajax({
             url: "/admin/api/order_service.php?id=" + id,
