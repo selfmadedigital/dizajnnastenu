@@ -44,7 +44,7 @@
 		    while($row = $result->fetch_assoc()) {
 		    	$inspiration_attributes = array();
 	
-		    	$sql = "SELECT filter_attribute.name, filter_attribute.img, filter_attribute.attribute FROM inspiration_to_attribute JOIN filter_attribute ON inspiration_to_attribute.filter_id = filter_attribute.id WHERE UPPER(inspiration_to_attribute.inspiration_name) = UPPER('".$row['name']."')";
+		    	$sql = "SELECT filter_attribute.name, filter_attribute.img, filter_attribute.attribute FROM inspiration_to_attribute JOIN filter_attribute ON inspiration_to_attribute.filter_id = filter_attribute.id WHERE inspiration_to_attribute.inspiration_id = '".$row['id']."'";
 		    	$result_inspiration_attributes = $db->query($sql);
 				if ($result_inspiration_attributes->num_rows > 0) {
 		    		while($rowattribute = $result_inspiration_attributes->fetch_assoc()) {

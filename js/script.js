@@ -60,7 +60,7 @@ function changePage(page, nameid) {
 	      	productData['selected-shipping'] = 0;
 
 	        $('#product-name h1').text(data['name']);
-	        $('#product-image').append('<img src="/img/' + data['img'] + '" alt="' + data['name'] + '" />');
+	        $('#product-image').html('<img src="/img/' + data['img'] + '" alt="' + data['name'] + '" />');
 			$('#product-description').html(data['description']);
 			$('#product-short-information').html(data['short_information']);
 
@@ -77,7 +77,15 @@ function changePage(page, nameid) {
 
 
 			$('#produkt .box-custom-color').each(function(i) {
-				$(this).css('background-color', '#' + data['color']);
+				if($(this).hasClass('color-half')){
+					$(this).css('background', 'linear-gradient(to right, #' + data['color'] + ' 50%, ' + LightenDarkenColor('#' + data['color'], -10) + ' 50%');
+				}else if($(this).hasClass('color-darker')){
+					$(this).css('background-color', LightenDarkenColor('#' + data['color'], -10));
+				}else if($(this).hasClass('color-dark')){
+					$(this).css('background-color', LightenDarkenColor('#' + data['color'], -20));
+				}else{
+					$(this).css('background-color', '#' + data['color']);
+				}
 			});
 
 			
@@ -90,7 +98,9 @@ function changePage(page, nameid) {
 			});
 
 			$('#produkt button').each(function(i) {
-				$(this).css('background-color', '#' + data['color']);
+				if(!$(this).hasClass('btn-menu')){
+					$(this).css('background-color', '#' + data['color']);
+				}
 			});
 			
 
@@ -183,17 +193,17 @@ function changePage(page, nameid) {
 	      			}
 	      		}
 
-	      		// $.each(value['attributes'], function(keyattr, valueattr) {
-	      		// 	if(jQuery.inArray(valueattr['name'] + ':' + valueattr['img'], filters[valueattr['attribute']]) < 0){
-	      		// 		filters[valueattr['attribute']].push(valueattr['name'] + ':' + valueattr['img']);
-	      		// 	}	
+	      		$.each(value['attributes'], function(keyattr, valueattr) {
+	      			if(jQuery.inArray(valueattr['name'] + ':' + valueattr['img'], filters[valueattr['attribute']]) < 0){
+	      				filters[valueattr['attribute']].push(valueattr['name'] + ':' + valueattr['img']);
+	      			}	
 
-      			// 	if(value[valueattr['attribute']] === undefined){
-      			// 		value[valueattr['attribute']] = valueattr['name'];
-      			// 	}else{
-      			// 		value[valueattr['attribute']] = value[valueattr['attribute']] + ';' + valueattr['name'];
-      			// 	}
-	      		// });
+      				if(value[valueattr['attribute']] === undefined){
+      					value[valueattr['attribute']] = valueattr['name'];
+      				}else{
+      					value[valueattr['attribute']] = value[valueattr['attribute']] + ';' + valueattr['name'];
+      				}
+	      		});
 
 	      		if(value['category'] === undefined){
 	      			value['category'] = "";
@@ -221,25 +231,23 @@ function changePage(page, nameid) {
 		      	$('#blog-container').text('');
 		      	$.each( data, function( key, value ) {
 		      		if ((key+1) % 2 === 1) { 
-		      			colorLeft = 9;
-		      			colorRight = 10;
+		      			color = "9-10";
 		      		}else{
-		      			colorLeft = 11;
-		      			colorRight = 9;
+		      			color = "11-9";
 		      		}
 
 
-		      		// $.each(value['attributes'], function(keyattr, valueattr) {
-		      		// 	if(jQuery.inArray(valueattr['name'] + ':' + valueattr['img'], filters[valueattr['attribute']]) < 0){
-		      		// 		filters[valueattr['attribute']].push(valueattr['name'] + ':' + valueattr['img']);
-		      		// 	}	
+		      		$.each(value['attributes'], function(keyattr, valueattr) {
+		      			if(jQuery.inArray(valueattr['name'] + ':' + valueattr['img'], filters[valueattr['attribute']]) < 0){
+		      				filters[valueattr['attribute']].push(valueattr['name'] + ':' + valueattr['img']);
+		      			}	
 
-	      			// 	if(value[valueattr['attribute']] === undefined){
-	      			// 		value[valueattr['attribute']] = valueattr['name'];
-	      			// 	}else{
-	      			// 		value[valueattr['attribute']] = value[valueattr['attribute']] + ';' + valueattr['name'];
-	      			// 	}
-		      		// });
+	      				if(value[valueattr['attribute']] === undefined){
+	      					value[valueattr['attribute']] = valueattr['name'];
+	      				}else{
+	      					value[valueattr['attribute']] = value[valueattr['attribute']] + ';' + valueattr['name'];
+	      				}
+		      		});
 
 		      		if(value['category'] === undefined){
 		      			value['category'] = "";
@@ -253,7 +261,8 @@ function changePage(page, nameid) {
 		      			value['color'] = "";
 		      		}
 
-	  				$('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorLeft + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div></div><div class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorRight + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content box-image"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div>');
+	  				// $('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorLeft + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div></div><div class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorRight + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content box-image"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div>');
+	  				$('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-12 col-sm-12 col-xs-12 box href-box box-color-half-' + color + ' double-column" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="row"><div class="col-sm-6 box-padding"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div><div class="col-sm-6 box-image box-padding"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div></div>')
 				});
 		      }
 		    });
@@ -319,7 +328,7 @@ function changePage(page, nameid) {
 }
 
 function resizeBox(element){
-	if(element.hasClass('col-sm-8')){
+	if(element.hasClass('col-sm-8') || element.hasClass('box-menu') || element.hasClass('double-column')){
 		height = element.outerWidth()/2;
 	}else if(element.hasClass('triple-column')){
 		height = element.outerWidth()/3;
@@ -335,6 +344,15 @@ function resizeBox(element){
 	if(element.closest("#popup").length > 0){
 		$('#popup-container').css('margin-left', -$('#popup-container').outerWidth()/2);
 		$('#popup-container').css('margin-top', -$('#popup-container').outerHeight()/2);
+	}
+	
+	adjustPageContainer();
+}
+
+function adjustPageContainer(){
+	var container = $('body>.vertical-center>.container');
+	if (container.height() > window.innerHeight){
+		container.css('max-width', window.innerHeight - 50 + 'px');
 	}
 }
 
@@ -470,6 +488,18 @@ function openMaterialSelection(){
 	$.each(productData['materials'], function( index, value ){
 	    data += '<div class="col-sm-3 popup-box href-box" onClick="selectMaterial(' + value['id'] + ');" style="background-image: url(/img/' + value['img'] + ');"></div>';
 	});
+	
+	var boxes = Object.keys(productData['materials']).length;
+	var remainingBoxes = 0;
+	if(boxes > 4){
+		remainingBoxes = boxes % 4;
+	}else{
+		remainingBoxes = 4 - boxes;
+	}
+	
+	for (i = 1; i <= remainingBoxes; i++) { 
+		data += '<div class="col-sm-3 popup-box dummy-box"></div>';	
+	}
 	 
 	data += '</div>';
 	openPopup(data);
@@ -482,6 +512,19 @@ function openFilterSelection(attribute){
 		filter = value.split(':');
 		data += '<div class="col-sm-3 popup-box box" style="background-image: url(/img/filters/' + filter[1] + ');" onClick="selectFilter(\''+ attribute + '\',\'' + filter[0] + '\');" id="filter-' + filter[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() + '">' + filter[0] + '</div>';
 	});
+	
+	var boxes = Object.keys(filters[attribute]).length + 1;
+	var remainingBoxes = 0;
+	if(boxes > 4){
+		remainingBoxes = boxes % 4;
+	}else{
+		remainingBoxes = 4 - boxes;
+	}
+	
+	for (i = 1; i <= remainingBoxes; i++) { 
+		data += '<div class="col-sm-3 popup-box dummy-box"></div>';	
+	}
+	
 	data += '</div>';
 	openPopup(data);
 
@@ -579,6 +622,7 @@ function selectShipping(index){
 
 	updatePriceCalculation();
 	productData['selected-shipping'] = shipping['id'];
+	closePopup();
 }
 
 function selectInstallation(requested){
@@ -586,11 +630,11 @@ function selectInstallation(requested){
 
 	if(requested){
 		price = calculatePrice(productData['installation_prices'])
-		$('#product-installation-group label small').text('S inštaláciou (+' + price + '€/m2)');
+		$('#product-installation-group label small').text('Áno (+' + price + '€/m2)');
 		$('#product-installation').text(price);
 		$('#product-installation').parent().show();
 	}else{
-		$('#product-installation-group label small').text('Bez inštalácie');
+		$('#product-installation-group label small').text('Nie');
 		$('#product-installation').text(0);
 		$('#product-installation').parent().hide();
 	}
@@ -614,8 +658,10 @@ function openAdditionalInfo(){
 
 function openInstallationSelection(){
 	var data = '<div class="row"><div class="col-sm-3 popup-box box-content-center" style="background-color: #ccc;"><div class="dummy"></div>Inštalácia</div><div class="col-sm-9"> ipsum</div></div><div class="row">';
-	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(0);">Bez</div>';
-	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(1);">S</div>';
+	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(0);">Nie</div>';
+	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(1);">Áno</div>';
+	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
+	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
 	data += '</div>';
 	openPopup(data);
 }
@@ -753,8 +799,20 @@ function isPsc(psc){
 function openShippingSelection(){
 	var data = '<div class="row"><div class="col-sm-3 popup-box box-content-center" style="background-color: #ccc;"><div class="dummy"></div>Doprava</div><div class="col-sm-9"> ipsum</div></div><div class="row">';
 	$.each(productData['shippings'], function( index, value ){
-	    data += '<div class="col-sm-3 popup-box" onClick="selectShipping(' + index + ');"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div>';
+	    data += '<div class="col-sm-3 popup-box" onClick="selectShipping(' + index + ');" style="background-image: url(/img/' + value['img'] + ');"></div>';
 	});
+	
+	var boxes = Object.keys(productData['shippings']).length;
+	var remainingBoxes = 0;
+	if(boxes > 4){
+		remainingBoxes = boxes % 4;
+	}else{
+		remainingBoxes = 4 - boxes;
+	}
+	
+	for (i = 1; i <= remainingBoxes; i++) { 
+		data += '<div class="col-sm-3 popup-box dummy-box"></div>';	
+	}
 	 
 	data += '</div>';
 	openPopup(data);
@@ -837,7 +895,7 @@ $(document).ready(function(){
 	   updatePriceCalculation();
 	});
 
-	$('#domov .box:nth-child(5)').after('<div class="col-md-4 col-sm-4 col-xs-12 box box-logo" id="desktop-logo"><a href="" class="box-content box-content-logo text-center"><img src="img/logo.png" alt="" /></a></div>');
+	$('#domov .box:nth-child(5)').after('<div class="col-md-4 col-sm-4 col-xs-12 box box-logo" id="desktop-logo"><a href="" class="box-content box-content-logo text-center"></a></div>');
 });
 
 $( window ).resize(function() {
@@ -848,13 +906,12 @@ $( window ).resize(function() {
   $('#popup .popup-box').each(function(i) {
 		resizeBox($(this));
 	});
+	
+	adjustPageContainer();
 });
 
-if (window.history && history.pushState) {
-    addEventListener('load', function() {
-        history.pushState(null, null, null);
-        addEventListener('popstate', function() {
-            var data = '<div class="row"><div class="col-sm-12 text-center"><h1>Prajete si opustiť stránku?</h1></div></div>';
+function openPopupMenu(){
+	var data = '<div class="row"><div class="col-sm-12 text-center"><h1>Prajete si opustiť stránku?</h1></div></div>';
             data += '<div class="row">';
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #C41C72;" onClick="history.pushState(null, null, null);closePopup();">Zostať</div>';
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #8B2573;" onClick="changePage(\'domov\',\'\');closePopup();">Menu</div>';
@@ -862,6 +919,13 @@ if (window.history && history.pushState) {
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #006199;" onClick="history.back();">Ísť späť</div>';
 			data += '</div>';
 			openPopup(data);
+}
+
+if (window.history && history.pushState) {
+    addEventListener('load', function() {
+        history.pushState(null, null, null);
+        addEventListener('popstate', function() {
+            openPopupMenu();
         });    
     });
 }

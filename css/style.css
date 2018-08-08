@@ -3,6 +3,8 @@
     body{
     	font-family: 'Hind', sans-serif;
     	font-size: 0.8vw;
+    	background-size: cover;
+    	background-image: url('/img/background.jpg');
     }
 
     a:link {
@@ -37,16 +39,19 @@
 	padding: 0;
 }
 
-
 .box-content{
 	position: absolute;
-    top: 0px;
-    left: 0px;
+	left: 0;
+    top: 0;
     text-align: left;
     width: 100%;
     height: 100%;
     padding: 20px;
     overflow: hidden;
+}
+
+.box-padding{
+	padding: 20px;
 }
 
 .box-content p{
@@ -65,10 +70,14 @@
 }
 
 .box-content-logo{
-	top: 20px;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
+	background-color: #fff;
+	background-image: url('/img/logo.png');
+	background-repeat: no-repeat;
+	background-position: center center; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: auto;
 }
 
 .box-content-logo img{
@@ -78,6 +87,10 @@
 
 .href-box{
 	cursor: pointer;
+}
+
+.dummy-box{
+	visibility: hidden;
 }
 
 
@@ -177,6 +190,19 @@ button, .btn-color{
     position: relative;
     margin-bottom: 0;
     border: 0 !important;
+}
+
+.btn-menu{
+	color: rgba(255,255,255,0.5);
+	background: transparent;
+    text-align: center;
+    font-size: 3vw;
+    position: relative;
+    top: 50%;
+    margin-top: -1.7vw;
+    padding: 0;
+    width: 100%;
+    padding-left: 0.5vw;
 }
 
 button span, .btn-color span{
@@ -470,6 +496,7 @@ input[type="file"] {
 @media (max-width: 1200px){
 	.container{
 		max-width: 70%;
+		width: 70%;
 	}
 
 	body{
@@ -494,6 +521,7 @@ input[type="file"] {
 @media (max-width: 768px){
 	.container{
 		max-width: 90%;
+		width: 90%;
 	}
 
 	body{
@@ -520,6 +548,34 @@ input[type="file"] {
 	}
 
 	#desktop-logo{
-		display: none;
+		display: none !important;
+	}
+	
+	.col-sm-6 {
+	    -ms-flex: 0 0 50%;
+	    flex: 0 0 50%;
+	    max-width: 50%;
+	}
+	
+	.btn-menu{
+		font-size: 12vw;
+	    margin-top: -6vw;
+	    padding-left: 2vw;
+	}
+	
+	.box-content p{
+		font-size: 4vw;
+	}
+	
+	#material-selection .btn-change{
+		right: 15px;
+    	left: auto;
+	}
+	
+	.material-preview{
+		width: 70%;
+	    margin-left: 15%;
+	    padding-bottom: 70%;
+	    margin-top: 5%;
 	}
 }

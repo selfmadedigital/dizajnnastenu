@@ -24,7 +24,7 @@
     	<div class="container">
 		    <div class="row subpage" style="display:none;" id="domov">
 		    	<div class="col-md-4 col-sm-4 col-xs-12 box" id="mobile-logo">
-		        <a href="" class="box-content box-content-logo text-center"><img src="img/logo.png" alt="" /></a>
+		        <a href="" class="box-content box-content-logo"></a>
 		      </div>
 		      <?php
 		      		$sql = "SELECT name, color FROM product ORDER BY order_index";
@@ -53,10 +53,20 @@
 		    </div>
 
 		    <div class="row subpage" style="display:none;" id="produkt">
-		      
-		      <div class="col-md-4 col-sm-4 col-xs-12 box box-custom-color">
-		        
-		        <a href="" class="box-content box-content-center text-center homepage" id="product-name"><h1></h1></a>
+		      <div class="col-md-4 col-sm-4 col-xs-12 box">
+		      	<div class="row">
+			      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
+			      		<a href="" class="box-content box-content-center text-center homepage" id="product-name"><h1></h1></a>
+			      	</div>
+			    </div>
+		      	<div class="row">
+			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color color-darker">
+			      		<button class="btn-menu icon-circle-left" onClick="changePage('domov','');"></button>
+			      	</div>
+			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color color-dark">
+			      		<button class="btn-menu icon-menu" onClick="openPopupMenu();"></button>
+			      	</div>
+			     </div>
 		      </div>
 		      <div class="col-md-8 col-sm-8 col-xs-12 box box-color-half-9-10">
 		        <div class="box-content text-center box-image" id="product-image">
@@ -295,7 +305,7 @@
 					        		</div>
 					        	</div>
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter-color">
+					        		<div class="col-sm-6 filter-design">
 					        			DIZAJN<small></small>
 					        		</div>
 					        		<div class="col-sm-6">

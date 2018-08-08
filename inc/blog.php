@@ -38,7 +38,7 @@
 		    	$row['long_content'] = htmlspecialchars_decode($row['long_content']);
 		    	$blog_attributes = array();
 
-		    	$sql = "SELECT * FROM blog_to_attribute WHERE blog_id = '".$row['id']."'";
+		    	$sql = "SELECT filter_attribute.name, filter_attribute.img, filter_attribute.attribute FROM blog_to_attribute JOIN filter_attribute ON blog_to_attribute.filter_id = filter_attribute.id WHERE blog_to_attribute.blog_id = '".$row['id']."'";
 		    	$result_blog_attributes = $db->query($sql);
 				if ($result_blog_attributes->num_rows > 0) {
 		    		while($rowattribute = $result_blog_attributes->fetch_assoc()) {
