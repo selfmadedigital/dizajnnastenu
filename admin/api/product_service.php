@@ -78,6 +78,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }
                 
                 echo json_encode($prices);
+            }else if($_GET['target'] == 'finalisations'){
+                $prices = array();  
+                class Finalisation {}
+    
+                $result = $db->query("SELECT * FROM product_finalisations WHERE UPPER(product_name) = UPPER('".$_GET['name']."')");
+                while($row = $result->fetch_assoc()) {
+                    $f = new Finalisation();
+                    $f->id = $row['id'];
+                    $f->name = $row['name'];
+                    $f->img = $row['img'];
+                    $f->percentage = $row['percentage'];
+                    
+                    $finalisations[] = $f;
+                }
+                
+                echo json_encode($finalisations);
+            }else if($_GET['target'] == 'finalisation-prices'){
+                class FinalisationPrice {}
+                $finalisation_prices = array();
+                    
+                $resultprices = $db->query("SELECT * FROM finalisation_prices WHERE finalisation_id = '".$_GET['id']."' ORDER BY size");
+                while($rowprice = $resultprices->fetch_assoc()) {
+                    if(isset($_GET['format']) && $_GET['format'] == 'calculate'){
+                        $finalisation_prices[$rowprice['size']] = $rowprice['price'];
+                    }else{
+                        $fp = new FinalisationPrice();
+                        $fp->id = $rowprice['id'];
+                        $fp->size = $rowprice['size'];
+                        $fp->price = $rowprice['price'];
+                            
+                        $finalisation_prices[] = $fp;
+                    }
+                }
+                
+                echo json_encode($finalisation_prices);
             }else if($_GET['target'] == 'discounts'){
                 $discounts = array();  
                 class Discount {}
@@ -103,6 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $product['description'] = htmlspecialchars_decode($product['description']);
             $product['short_information'] = htmlspecialchars_decode($product['short_information']);
             $product['long_information'] = htmlspecialchars_decode($product['long_information']);
+            $product['finalisation_tableprice'] = $product['finalisation_tableprice'];
+            $product['finalisation_multiselect'] = $product['finalisation_multiselect'];
             
             echo json_encode($product);
         }
@@ -124,35 +161,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
-        if(isset( $_POST['target']) && !empty( $_POST['target'])){
-            if($_POST['target'] == 'materials'){
-                $db->query("UPDATE product_materials SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'");
-                
-                class Response {}
-        
-                $data = new Response();
-                $data->id = $_POST['id'];
-                $data->img = $_POST['target']."/".basename($_FILES["file"]["name"]);
-                
-                echo json_encode($data);
+        $response = uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
+        if($response['result'] == '1'){
+            if(isset( $_POST['target']) && !empty( $_POST['target'])){
+                if($_POST['target'] == 'materials'){
+                    $db->query("UPDATE product_materials SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'");
+  
+                    $response['id'] = $_POST['id'];
+                    $response['img'] = $_POST['target']."/".basename($_FILES["file"]["name"]);
+                }
+            }else{
+                $db->query("UPDATE product SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE name = '".$_POST['product_name']."'");
+                echo "UPDATE product SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE name = '".$_POST['product_name']."'";
             }
-        }else{
-            $db->query("UPDATE product SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE name = '".$_POST['product_name']."'");
-            echo json_encode("ok");
         }
+        
+        echo json_encode($response);
     }else{
         if (isset( $_POST['target'] ) && !empty( $_POST['target'])){
             if($_POST['target'] == 'material'){
-                $db->query("INSERT INTO product_materials(name, product_name, img) VALUES ('".$_POST['name']."','".$_POST['product_name']."','materials/default.jpg')");    
+                $db->query("INSERT INTO product_materials(name, product_name, img) VALUES ('".$_POST['name']."','".$_POST['product_name']."','materials/default.jpg')");
+            }else if($_POST['target'] == 'finalisation'){
+                $db->query("INSERT INTO product_finalisations(name, product_name, img) VALUES ('".$_POST['name']."','".$_POST['product_name']."','finalisations/default.jpg')");
             }else if($_POST['target'] == 'price'){
                 $db->query("INSERT INTO product_prices(product_name, size, price) VALUES ('".$_POST['id']."','".$_POST['size']."','".$_POST['price']."')");
             }else if($_POST['target'] == 'material-price'){
                 $db->query("INSERT INTO material_prices(material_id, size, price) VALUES ('".$_POST['id']."','".$_POST['size']."','".$_POST['price']."')");
+            }else if($_POST['target'] == 'finalisation-price'){
+                $db->query("INSERT INTO finalisation_prices(finalisation_id, size, price) VALUES ('".$_POST['id']."','".$_POST['size']."','".$_POST['price']."')");
             }else if($_POST['target'] == 'discount'){
                 $db->query("INSERT INTO product_quantity_discount(product_name, quantity, discount) VALUES ('".$_POST['product_name']."','".$_POST['quantity']."','".$_POST['percentage']."')");
             }else if($_POST['target'] == 'installation'){
                 $db->query("INSERT INTO installation_prices(product_name, size, price) VALUES ('".$_POST['product_name']."','".$_POST['size']."','".$_POST['price']."')");
+            }else if($_POST['target'] == 'finalisation_multiselect'){
+                $db->query("UPDATE product SET finalisation_multiselect = '".$_POST['value']."' WHERE name = '".$_POST['product_name']."'");
+            }else if($_POST['target'] == 'finalisation_tableprice'){
+                $db->query("UPDATE product SET finalisation_tableprice = '".$_POST['value']."' WHERE name = '".$_POST['product_name']."'");
             }
             
             echo json_encode($db->insert_id);

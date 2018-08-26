@@ -33,6 +33,9 @@ var DataService = (function () {
     DataService.prototype.getProductInstallations = function (product_name) {
         return this.http.get("/admin/api/product_service.php?target=installations&name=" + product_name.toString()).map(function (res) { return res.json(); });
     };
+    DataService.prototype.getProductFinalisations = function (product_name) {
+        return this.http.get("/admin/api/product_service.php?target=finalisations&name=" + product_name.toString()).map(function (res) { return res.json(); });
+    };
     DataService.prototype.removeTarget = function (id, target) {
         $.ajax({
             url: "/admin/api/product_service.php?target=" + target + "&id=" + id,

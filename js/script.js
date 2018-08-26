@@ -15,6 +15,8 @@
 		}else{
 			changePage("domov","");
 		}
+		
+		
 
 
 		$("#domov a").on("click", function(event){
@@ -31,8 +33,6 @@
 		$("form button").on("click", function(event){
 			event.preventDefault();
 		})
-
-
 
 		$("#popup-overlay").on("click", function(event){
 			closePopup();
@@ -57,6 +57,7 @@ function changePage(page, nameid) {
 	      success: function(data) {
 	      	productData = data;
 	      	productData['selected-material'] = 0;
+	      	productData['selected-finalisation'] = 0;
 	      	productData['selected-shipping'] = 0;
 
 	        $('#product-name h1').text(data['name']);
@@ -70,9 +71,11 @@ function changePage(page, nameid) {
 			if(Object.keys(data['materials']).length > 0){
 				selectMaterial(getFirstKey(data['materials']));
 			}
+			if(Object.keys(data['finalisations']).length > 0){
+				selectFinalisation(getFirstKey(data['finalisations']));
+			}
 			selectShipping(0);
 			selectInstallation(0);
-			selectFinalisation();
 			updatePriceCalculation();
 
 
@@ -261,8 +264,7 @@ function changePage(page, nameid) {
 		      			value['color'] = "";
 		      		}
 
-	  				// $('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorLeft + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div></div><div class="col-md-6 col-sm-6 col-xs-12 box href-box box-color-' + colorRight + '" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="box-content box-image"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div>');
-	  				$('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-12 col-sm-12 col-xs-12 box href-box box-color-half-' + color + ' double-column" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="row"><div class="col-sm-6 box-padding"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div><div class="col-sm-6 box-image box-padding"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div></div>')
+	  				$('#blog-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-12 col-sm-12 col-xs-12 box href-box box-color-half-' + color + ' double-column" onClick="changePage(\'blog\',\'' + value['name'] + '\');"><div class="row"><div class="col-sm-6 box-padding"><h1>' + value['name'] + '</h1><p>' + value['short_content'] + '</p></div><div class="col-sm-6 box-image box-padding"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div></div>');
 				});
 		      }
 		    });
@@ -312,6 +314,8 @@ function changePage(page, nameid) {
 		$('.subpage#domov').addClass("active");
 	}
 
+	var finalOpacity = 1;
+	
 	$('.subpage.active').fadeOut(1000, function(){
 		$('#' + page + ' .box').each(function(i) {
 			$(this).css('display', 'none');
@@ -320,7 +324,12 @@ function changePage(page, nameid) {
 			$('.subpage.active').removeClass('active');
 			$("#" + page).addClass('active');
 			$('#' + page + ' .box').each(function(i) {
-				$(this).fadeTo( Math.floor((Math.random() * 2000) + 200), 1);
+				if(page == 'domov' && !$(this).hasClass('box-logo')){
+					finalOpacity = 0.7;	
+				}else{
+					finalOpacity = 1;
+				}
+				$(this).fadeTo( Math.floor((Math.random() * 2000) + 200), finalOpacity);
 				resizeBox($(this));
 			});
 		});
@@ -357,6 +366,9 @@ function adjustPageContainer(){
 }
 
 function calculatePrice(price_table){
+	if(price_table.length == 0){
+		return 0;
+	}
 	squaresize = getSquareSize();
 	if(price_table[squaresize] !== undefined){
 		return price_table[squaresize];
@@ -410,10 +422,16 @@ function updatePriceCalculation(){
 	var squareSize = getSquareSize();
 	var pricePerSquare = parseFloat(calculatePrice(productData['prices'])).toFixed(2);
 	if($('#material-price').val().length > 0){
-		 pricePerSquare += parseFloat($('#material-price').val()).toFixed(2);
+		 pricePerSquare = (parseFloat(pricePerSquare) + parseFloat($('#material-price').val())).toFixed(2);
 	}
 	var priceInstallation = squaresize*parseFloat($('#product-installation').text());
-	var priceFinalisation = squaresize*parseFloat($('#product-finalisation').text());
+	
+	var priceFinalisation = 0;
+	if(productData['finalisation_tableprice'] == '1'){
+		priceFinalisation = squaresize*parseFloat($('#product-finalisation span').text());
+	}else{
+		priceFinalisation = squareSize*pricePerSquare/100*parseFloat($('#product-finalisation span').text());
+	}
 	var priceShipping = parseFloat($('#product-shipping').text()).toFixed(2);
 
 	var totalPrice = (squareSize*pricePerSquare + priceInstallation + priceFinalisation).toFixed(2);
@@ -449,15 +467,18 @@ function updatePriceCalculation(){
 	$('#product-price-total-tax-free').text((totalPrice/1.2).toFixed(2));
 }
 
-function openPopup(data){
+function openPopup(data, fullscreen){
 	var scrollPosition = [
 	  self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
 	  self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
 	];
 
 	$('#popup-container').html(data);
+	if(fullscreen){
+		$('#popup-container').addClass('fullscreen');
+	}
 	$('#popup').css('left', scrollPosition[0]);
-	$('#popup').css('top', scrollPosition[1]);
+	$('#popup').css('top', scrollPosition[1] - 3);
 	$('#popup').fadeIn(500);
 	$('#popup-container').css('margin-left', -$('#popup-container').outerWidth()/2);
 	$('#popup-container').css('margin-top', -$('#popup-container').outerHeight()/2);
@@ -502,7 +523,47 @@ function openMaterialSelection(){
 	}
 	 
 	data += '</div>';
-	openPopup(data);
+	openPopup(data, false);
+}
+
+function openInspirationsPopup(){
+	$.ajax({
+	      type: "POST",
+	      dataType: "json",
+	      url: "/inc/inspiration.php",
+	      success: function(data) {
+	      	var popupData = '<div class="row">';
+	      	$.each( data, function(key, value) {
+  				popupData += '<div class="popup-box col-sm-2" style="background-image: url(/img/' + value['img'] + ');"></div>';
+			});
+			
+			popupData += '</div>';
+				
+			openPopup(popupData, true);	
+	      }
+	    });
+}
+
+function openFinalisationSelection(){
+	var data = '<div class="row"><div class="col-sm-3 popup-box box-content-center" style="background-color: #' + productData['color'] + ';">Finalizácia</div><div class="col-sm-9"> ipsum</div></div><div class="row">';
+	$.each(productData['finalisations'], function( index, value ){
+	    data += '<div class="col-sm-3 popup-box href-box" onClick="selectFinalisation(' + value['id'] + ');" style="background-image: url(/img/' + value['img'] + ');"></div>';
+	});
+	
+	var boxes = Object.keys(productData['finalisations']).length;
+	var remainingBoxes = 0;
+	if(boxes > 4){
+		remainingBoxes = boxes % 4;
+	}else{
+		remainingBoxes = 4 - boxes;
+	}
+	
+	for (i = 1; i <= remainingBoxes; i++) { 
+		data += '<div class="col-sm-3 popup-box dummy-box"></div>';	
+	}
+	 
+	data += '</div>';
+	openPopup(data, false);
 }
 
 function openFilterSelection(attribute){
@@ -526,7 +587,7 @@ function openFilterSelection(attribute){
 	}
 	
 	data += '</div>';
-	openPopup(data);
+	openPopup(data, false);
 
 	$('#popup .popup-box').each(function(i) {
 		resizeBox($(this));
@@ -593,6 +654,12 @@ function selectFilter(attribute,filter){
   	}, 2000);
 }
 
+function resetFilterSelection(){
+	$.each(Object.keys(filters), function(key, value) {
+    	selectFilter(value, "Všetko");
+	});
+}
+
 function selectMaterial(id){
 	var selected_material = productData['materials'][id];
 	var material_price = calculatePrice(selected_material['prices']);
@@ -603,6 +670,36 @@ function selectMaterial(id){
 	updatePriceCalculation();
 	productData['selected-material'] = id;
 	closePopup();
+}
+
+function selectFinalisation(id){
+	var selected_finalisation = productData['finalisations'][id];
+	
+	var finalisation_price = 0;
+	var finalisation_type = '';
+	if(productData['finalisation_tableprice'] == '1'){
+		finalisation_price = calculatePrice(selected_finalisation['prices']);
+		finalisation_type = '€/m2';
+	}else{
+		finalisation_price = selected_finalisation['percentage'];
+		finalisation_type = '%';
+	}
+	
+	finalisation_label = selected_finalisation['name'];
+	if(finalisation_price > 0){
+		finalisation_label += ' (+' + finalisation_price + finalisation_type + ')';
+	}
+	$('#product-finalisation-group label small').text(finalisation_label);
+	$('#product-finalisation').html('<span>' + finalisation_price + '</span> ' + finalisation_type);
+	
+	if(finalisation_price == 0){
+		$('#product-finalisation').parent().hide();
+	}else{
+		$('#product-finalisation').parent().show();
+	}
+
+	updatePriceCalculation();
+	productData['selected-finalisation'] = id;
 }
 
 function selectShipping(index){
@@ -643,17 +740,9 @@ function selectInstallation(requested){
 	closePopup();
 }
 
-function selectFinalisation(){
-	$('#product-finalisation-group label small').text('Bez finalizácie');
-	$('#product-finalisation').parent().hide();
-	$('#product-finalisation').text(0);
-
-	updatePriceCalculation();
-}
-
 function openAdditionalInfo(){
 	var data = '<div class="row"><div class="col-sm-12">' + productData['long_information'] + '</div></div><div class="row"><div class="col-sm-12 text-right"><button class="btn-close" onClick="closePopup();"><span class="icon-cross"></span>Zatvoriť</button></div></div>';
-	openPopup(data);
+	openPopup(data, false);
 }
 
 function openInstallationSelection(){
@@ -663,7 +752,7 @@ function openInstallationSelection(){
 	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
 	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
 	data += '</div>';
-	openPopup(data);
+	openPopup(data, false);
 }
 
 function openOrderForm(){
@@ -691,7 +780,7 @@ function openOrderForm(){
 	data += '<hr />';
 	data += '<div class="form-group row"><div class="col-sm-12 text-center"><input type="submit" class="btn-color btn-center" value="Odoslať" /><input type="button" class="btn-color btn-center" onClick="closePopup();" value="Zrušiť" /></div></div>';
 	data += '</form></div></div>';
-	openPopup(data);
+	openPopup(data, false);
 
 	$("#same-address").change(function() {
 	    if(this.checked) {
@@ -815,7 +904,7 @@ function openShippingSelection(){
 	}
 	 
 	data += '</div>';
-	openPopup(data);
+	openPopup(data, false);
 }
 
 function LightenDarkenColor(col, amt) {
@@ -918,7 +1007,26 @@ function openPopupMenu(){
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #414042;" onClick="changePage(\'kontakt\',\'\');closePopup();">Kontakt</div>';
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #006199;" onClick="history.back();">Ísť späť</div>';
 			data += '</div>';
-			openPopup(data);
+			openPopup(data, false);
+}
+
+function scrollContainer(target){
+	var container = $('#' + target + '-container');
+	var maxPosition = container.children().length/3*container.outerHeight()-container.outerHeight();
+	if(target == 'inspiration'){
+		maxPosition /= 2;
+	}
+	var newPosition = container.scrollTop() + container.outerHeight();
+	if(newPosition > maxPosition){
+		newPosition = container.scrollTop() + container.outerHeight()/3*2;
+		if(newPosition > maxPosition){
+			newPosition = container.scrollTop() + container.outerHeight()/3;
+			if(newPosition > maxPosition){
+				newPosition = 0;
+			}
+		}
+	}
+	container.animate({ scrollTop: newPosition }, 1500);
 }
 
 if (window.history && history.pushState) {
@@ -929,3 +1037,9 @@ if (window.history && history.pushState) {
         });    
     });
 }
+
+window.setInterval(function(){
+	var quotes = $('.quotes span');
+	quotes.fadeOut();
+	$(quotes[Math.floor(Math.random()*quotes.length)]).delay( 800 ).fadeIn();	
+}, 10000);

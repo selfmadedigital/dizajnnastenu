@@ -18,12 +18,13 @@
   	<div id="popup" style="display: none;">
   		<div id="popup-overlay"></div>
   		<div id="popup-container"></div>
+  		<button id="popup-close" class="icon-cross" onClick="closePopup();"></button>
   	</div>
 
     <div class="vertical-center">
     	<div class="container">
 		    <div class="row subpage" style="display:none;" id="domov">
-		    	<div class="col-md-4 col-sm-4 col-xs-12 box" id="mobile-logo">
+		    	<div class="col-md-4 col-sm-4 col-xs-12 box box-logo" id="mobile-logo">
 		        <a href="" class="box-content box-content-logo"></a>
 		      </div>
 		      <?php
@@ -56,15 +57,15 @@
 		      <div class="col-md-4 col-sm-4 col-xs-12 box">
 		      	<div class="row">
 			      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
-			      		<a href="" class="box-content box-content-center text-center homepage" id="product-name"><h1></h1></a>
+			      		<div class="box-content box-content-center text-center" id="product-name"><h1></h1></div>
 			      	</div>
 			    </div>
 		      	<div class="row">
-			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color color-darker">
-			      		<button class="btn-menu icon-circle-left" onClick="changePage('domov','');"></button>
+			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
+			      		<button class="btn-menu icon-arrow"></button>
 			      	</div>
-			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color color-dark">
-			      		<button class="btn-menu icon-menu" onClick="openPopupMenu();"></button>
+			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+			      		<button class="btn-menu icon-menu"></button>
 			      	</div>
 			     </div>
 		      </div>
@@ -106,7 +107,7 @@
 						    <div class="form-group row" id="product-finalisation-group">
 						      <label class="col-sm-6 control-label">FINALIZÁCIA:<small></small></label>
 						      <div class="col-sm-6 text-right">
-			        				<button class="btn-change" onClick="openMaterialSelection();"><span class="icon-refresh"></span>Zmeniť</button>
+			        				<button class="btn-change" onClick="openFinalisationSelection();"><span class="icon-refresh"></span>Zmeniť</button>
 			        			</div>
 						    </div>
 						    <div class="form-group row" id="product-installation-group">
@@ -171,15 +172,15 @@
 				      		</div>
 				      		<div class="row">
 				      			<div class="col-sm-6">
-				      				CENA / KS:
+				      				FINALIZÁCIA:
 				      			</div>
-				      			<div class="col-sm-6 text-right" id="product-price-piece"></div>
+				      			<div class="col-sm-6 text-right" id="product-finalisation"><span></span></div>
 				      		</div>
 				      		<div class="row">
 				      			<div class="col-sm-6">
-				      				FINALIZÁCIA:
+				      				CENA / KS:
 				      			</div>
-				      			<div class="col-sm-6 text-right" id="product-finalisation"></div>
+				      			<div class="col-sm-6 text-right" id="product-price-piece"></div>
 				      		</div>
 				      		<div class="row">
 				      			<div class="col-sm-6">
@@ -254,18 +255,36 @@
 					        			<button class="btn-change" onClick="openFilterSelection('design');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
+					        	<div class="row filter-change">
+					        		<div class="col-sm-6 offset-sm-6">
+					        			<button class="btn-change" onClick="resetFilterSelection();"><span class="icon-refresh"></span>Reset</button>
+					        		</div>
+					        	</div>
 					        </div>
 					      </div>
 				  	  </div>
 
 				  	  <div class="row">
-						 <div class="col-sm-12 box box-color-11">
-					        <div class="box-content-center">Lorem ipsum dolor sit amet, consec- tetuer adipiscing elit.</div>
+						 <div class="col-md-12 box box-color-11">
+					        <div class="box-content-center quotes">
+					        	<?php
+						      		$sql = "SELECT text FROM quotes";
+									$result = $db->query($sql);
+				
+									if ($result->num_rows > 0) {
+					    				while($row = $result->fetch_assoc()) {
+					    					echo '<span>' . $row['text'] . '</span>';
+					    				}
+					    			}
+						      ?>
+					        </div>
 					      </div>
 				  	  </div>
 		    	</div>
 		    	<div class="col-md-8 col-sm-8 col-xs-12">
 		    		<div class="row" id="inspiration-container"></div>
+		    		<button class="scroll-arrow icon-arrow" onClick="scrollContainer('inspiration');"></button>
+		    		<button class="fullscreen-arrows icon-fullscreen" onClick="openInspirationsPopup();"></button>
 		    	</div>
 		     </div>
 
@@ -312,18 +331,35 @@
 					        			<button class="btn-change" onClick="openFilterSelection('design');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
+					        	<div class="row filter-change">
+					        		<div class="col-sm-6 offset-sm-6">
+					        			<button class="btn-change" onClick="resetFilterSelection();"><span class="icon-refresh"></span>Reset</button>
+					        		</div>
+					        	</div>
 					        </div>
 					      </div>
 				  	  </div>
 
 				  	  <div class="row">
 						 <div class="col-md-12 box box-color-11">
-					        <div class="box-content-center">Lorem ipsum dolor sit amet, consec- tetuer adipiscing elit.</div>
+					        <div class="box-content-center quotes">
+					        	<?php
+						      		$sql = "SELECT text FROM quotes";
+									$result = $db->query($sql);
+				
+									if ($result->num_rows > 0) {
+					    				while($row = $result->fetch_assoc()) {
+					    					echo '<span>' . $row['text'] . '</span>';
+					    				}
+					    			}
+						      ?>
+					        </div>
 					      </div>
 				  	  </div>
 		    	</div>
 		    	<div class="col-md-8 col-sm-8 col-xs-12">
 		    		<div class="row" id="blog-container"></div>
+		    		<button class="scroll-arrow icon-arrow" onClick="scrollContainer('blog');"></button>
 		    	</div>
 		     </div>
 

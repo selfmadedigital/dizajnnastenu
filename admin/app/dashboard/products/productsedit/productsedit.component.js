@@ -22,86 +22,6 @@ var ProductsEditComponent = (function () {
     ProductsEditComponent.prototype.ngOnInit = function () {
         // Init Tooltips
         $('[rel="tooltip"]').tooltip();
-        var product_name = this.route.snapshot.params['name'];
-        var Upload = function (file, target) {
-            this.file = file;
-            this.target = target;
-        };
-        Upload.prototype.getType = function () {
-            return this.file.type;
-        };
-        Upload.prototype.getSize = function () {
-            return this.file.size;
-        };
-        Upload.prototype.getName = function () {
-            return this.file.name;
-        };
-        Upload.prototype.doUpload = function () {
-            var that = this;
-            var formData = new FormData();
-            // add assoc key values, this will be posts values
-            formData.append("file", this.file, this.getName());
-            formData.append("upload_file", true);
-            formData.append("product_name", product_name);
-            formData.append("target", this.target);
-            $.ajax({
-                type: "POST",
-                url: "/admin/api/product_service.php",
-                xhr: function () {
-                    var myXhr = $.ajaxSettings.xhr();
-                    if (myXhr.upload) {
-                        myXhr.upload.addEventListener('progress', that.progressHandling, false);
-                    }
-                    return myXhr;
-                },
-                complete: function (data) {
-                    console.log(data);
-                },
-                error: function (error) {
-                    // handle error
-                },
-                async: true,
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                timeout: 60000
-            });
-        };
-        Upload.prototype.progressHandling = function (event) {
-            var percent = 0;
-            var position = event.loaded || event.position;
-            var total = event.total;
-            var progress_bar_id = "#progress-wrp";
-            if (event.lengthComputable) {
-                percent = Math.ceil(position / total * 100);
-            }
-            // update progressbars classes so it fits your code
-            $(progress_bar_id + " .progress-bar").css("width", +percent + "%");
-            $(progress_bar_id + " .status").text(percent + "%");
-        };
-        $('textarea').froalaEditor({
-            language: 'sk'
-        });
-        this.ds.getProduct(this.route.snapshot.params['name']).subscribe(function (res) {
-            $('#product_name').val(res['name']);
-            $('#product_name').parent().removeClass('is-empty');
-            $('#product-image-upload').html('<img src="/img/' + res['img'] + '" alt="' + res['name'] + '">');
-            $('#colorpicker input').val('#' + res['color']);
-            $("#colorpicker").colorpicker({
-                format: 'hex',
-                color: res['color'],
-            });
-            $('textarea#short_information').froalaEditor('html.set', res['short_information']);
-            $('textarea#long_information').froalaEditor('html.set', res['long_information']);
-            $('textarea#description').froalaEditor('html.set', res['description']);
-        });
-        $.getScript('/admin/assets/js/plugins/jquery.tagsinput.js');
-        $("#product-image").on("change", function (e) {
-            var file = $(this)[0].files[0];
-            var upload = new Upload(file, "products");
-            upload.doUpload();
-        });
     };
     ProductsEditComponent.prototype.selectMaterial = function (id, name) {
         $('#materials-table tbody tr').css('background', '#fff');
@@ -128,6 +48,32 @@ var ProductsEditComponent = (function () {
             }
         });
         $('#material-price-card').show();
+    };
+    ProductsEditComponent.prototype.selectFinalisation = function (id, name) {
+        $('#finalisations-table tbody tr').css('background', '#fff');
+        $('#finalisation-price-table tbody tr').remove();
+        $('#finalisation-' + id).css('background', 'rgba(0, 188, 212, 0.40)');
+        $('#finalisation-' + id).addClass('selected');
+        var finalisationdata = {
+            "id": id,
+            "target": "finalisation-prices",
+            "name": this.route.snapshot.params['name']
+        };
+        finalisationdata = $(this).serialize() + "&" + $.param(finalisationdata);
+        $.ajax({
+            type: "GET",
+            url: "/admin/api/product_service.php",
+            data: finalisationdata,
+            dataType: "json",
+            success: function (data) {
+                if (data != 0) {
+                    $.each(data, function (key, value) {
+                        $('#finalisation-price-table tbody').append('<tr id="finalisation-price-' + value['id'] + '"><td>' + parseFloat(value['size']).toFixed(2) + ' <small>m<sup>2</sup></small></td><td>' + parseFloat(value['price']).toFixed(2) + ' <small>&euro;</small></td><td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-danger" (click)="removefinalisationprice(' + value['id'] + ',' + value['size'] + ')"><i class="material-icons">close</i></button></td></tr>');
+                    });
+                }
+            }
+        });
+        $('#finalisation-price-card').show();
     };
     ProductsEditComponent.prototype.imageUploaded = function (e) {
         var Upload = function (file, target, id) {
@@ -195,6 +141,7 @@ var ProductsEditComponent = (function () {
     };
     ProductsEditComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
+        var product_name = this.route.snapshot.params['name'];
         this.ds.getProductMaterials(this.route.snapshot.params['name']).subscribe(function (res) {
             _this.materials = res;
         });
@@ -207,6 +154,149 @@ var ProductsEditComponent = (function () {
         this.ds.getProductInstallations(this.route.snapshot.params['name']).subscribe(function (res) {
             _this.installations = res;
         });
+        this.ds.getProductFinalisations(this.route.snapshot.params['name']).subscribe(function (res) {
+            _this.finalisations = res;
+        });
+        var Upload = function (file, target) {
+            this.file = file;
+            this.target = target;
+        };
+        Upload.prototype.getType = function () {
+            return this.file.type;
+        };
+        Upload.prototype.getSize = function () {
+            return this.file.size;
+        };
+        Upload.prototype.getName = function () {
+            return this.file.name;
+        };
+        Upload.prototype.doUpload = function () {
+            var that = this;
+            var formData = new FormData();
+            var result;
+            // add assoc key values, this will be posts values
+            formData.append("file", this.file, this.getName());
+            formData.append("upload_file", true);
+            formData.append("product_name", product_name);
+            formData.append("target", this.target);
+            $.ajax({
+                type: "POST",
+                url: "/admin/api/product_service.php",
+                xhr: function () {
+                    var myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) {
+                        myXhr.upload.addEventListener('progress', that.progressHandling, false);
+                    }
+                    return myXhr;
+                },
+                complete: function (data) {
+                    result = data;
+                },
+                async: true,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                timeout: 60000
+            });
+            return result;
+        };
+        Upload.prototype.progressHandling = function (event) {
+            var percent = 0;
+            var position = event.loaded || event.position;
+            var total = event.total;
+            var progress_bar_id = "#progress-wrp";
+            if (event.lengthComputable) {
+                percent = Math.ceil(position / total * 100);
+            }
+            // update progressbars classes so it fits your code
+            $(progress_bar_id + " .progress-bar").css("width", +percent + "%");
+            $(progress_bar_id + " .status").text(percent + "%");
+        };
+        $('textarea').froalaEditor({
+            language: 'sk'
+        });
+        this.ds.getProduct(this.route.snapshot.params['name']).subscribe(function (res) {
+            $('#product_name').val(res['name']);
+            $('#product_name').parent().removeClass('is-empty');
+            $('#product-image-upload').html('<img src="/img/' + res['img'] + '" alt="' + res['name'] + '">');
+            $('#colorpicker input').val('#' + res['color']);
+            $("#colorpicker").colorpicker({
+                format: 'hex',
+                color: res['color'],
+            });
+            if (res['finalisation_tableprice'] == '1') {
+                $('.finalisation-percentage-column').hide();
+                $('.finalisation-table-button').show();
+                $("#finalisationTypeTable").prop("checked", true);
+            }
+            else {
+                $('.finalisation-percentage-column').show();
+                $('.finalisation-table-button').hide();
+                $("#finalisationTypePercentage").prop("checked", true);
+            }
+            if (res['finalisation_multiselect'] == '1') {
+                $("#finalisationMultiselect").prop("checked", true);
+            }
+            else {
+                $("#finalisationMultiselect").prop("checked", false);
+            }
+            $('textarea#short_information').froalaEditor('html.set', res['short_information']);
+            $('textarea#long_information').froalaEditor('html.set', res['long_information']);
+            $('textarea#description').froalaEditor('html.set', res['description']);
+        });
+        $.getScript('/admin/assets/js/plugins/jquery.tagsinput.js');
+        $("#product-image").on("change", function (e) {
+            var file = $(this)[0].files[0];
+            var upload = new Upload(file, "products");
+            result = upload.doUpload();
+            if (result.responseJSON['result'] == '0') {
+                $.each(result.responseJSON['errors'], function (key, value) {
+                    this.ds.showNotification("error", value);
+                });
+            }
+            else {
+                this.ds.showNotification("success", "Obrázok bol úspešne zmenený!");
+            }
+        });
+        $('input[type=radio][name=calculationFinalisationType]').change(function () {
+            var data = {};
+            data['target'] = 'finalisation_tableprice';
+            data['value'] = '0';
+            data['product_name'] = product_name;
+            if ($(this).attr('id') == 'finalisationTypeTable') {
+                data['value'] = '1';
+                $('.finalisation-percentage-column').hide();
+                $('.finalisation-table-button').show();
+            }
+            else {
+                $('.finalisation-percentage-column').show();
+                $('.finalisation-table-button').hide();
+            }
+            $.ajax({
+                type: "POST",
+                url: "/admin/api/product_service.php",
+                data: data,
+                success: function (data) {
+                }
+            });
+        });
+        $('input[type=checkbox][name=multiselect]').change(function () {
+            var data = {};
+            data['target'] = 'finalisation_multiselect';
+            data['value'] = '0';
+            data['product_name'] = product_name;
+            if ($(this).prop('checked')) {
+                data['value'] = '1';
+            }
+            $.ajax({
+                type: "POST",
+                url: "/admin/api/product_service.php",
+                data: data,
+                success: function (data) {
+                }
+            });
+        });
     };
     ProductsEditComponent.prototype.createTablePriceEntry = function (target) {
         var dataprice = {};
@@ -216,6 +306,9 @@ var ProductsEditComponent = (function () {
             dataprice['price'] = $('#new-' + target + '-price').val();
             if (target == 'material-price') {
                 dataprice['id'] = $('#materials-table tbody tr.selected').attr('id').split("-")[1];
+            }
+            else if (target == 'finalisation-price') {
+                dataprice['id'] = $('#finalisations-table tbody tr.selected').attr('id').split("-")[1];
             }
             else {
                 dataprice['id'] = this.route.snapshot.params['name'];
@@ -294,6 +387,23 @@ var ProductsEditComponent = (function () {
                 }
             });
             $('#new-material').val('');
+        }
+    };
+    ProductsEditComponent.prototype.createFinalisation = function () {
+        var finalisationdata = {};
+        if ($('#new-finalisation').val().length > 0) {
+            finalisationdata['target'] = 'finalisation';
+            finalisationdata['name'] = $('#new-finalisation').val();
+            finalisationdata['product_name'] = this.route.snapshot.params['name'];
+            $.ajax({
+                type: "POST",
+                url: "/admin/api/product_service.php",
+                data: finalisationdata,
+                success: function (data) {
+                    $('#finalisations-table tbody').append('<tr id="finalisation-' + data + '"><td class="img-container"><img alt="' + finalisationdata['name'] + '" src="/img/finalisations/default.jpg"></td><td>' + finalisationdata['name'] + '</td><td class="finalisation-percentage-column"><small>+</small><small>%</small></td><td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">add_a_photo</i></button><button type="button" rel="tooltip" class="btn btn-info" (click)="selectFinalisation(' + data + ')"><i class="material-icons">keyboard_arrow_down</i></button><button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFinalisation(' + data + ')"><i class="material-icons">close</i></button></td></tr>');
+                }
+            });
+            $('#new-finalisation').val('');
         }
     };
     ProductsEditComponent.prototype.createDiscount = function () {

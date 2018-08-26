@@ -22,7 +22,6 @@
 			$product['short_information'] = htmlspecialchars_decode($product['short_information']);
     		$product['long_information'] = htmlspecialchars_decode($product['long_information']);
 
-
 	    	$sql = "SELECT * FROM product_prices WHERE UPPER(product_name) = UPPER('".$product_name."')";
 	    	$resultprices = $db->query($sql);
 			if ($resultprices->num_rows > 0) {
@@ -53,7 +52,28 @@
 	    	}
 	       
 	    	$product['materials'] = $materials;
+	    	
+	    	$sql = "SELECT * FROM product_finalisations WHERE UPPER(product_name) = UPPER('".$product_name."')";
+	    	$resultFinalisations = $db->query($sql);
+			if ($resultFinalisations->num_rows > 0) {
+	    		while($finalisation = $resultFinalisations->fetch_assoc()) {
+	    			$finalisation_prices = array();
+	    			if($product['finalisation_tableprice'] == '1'){
+		    			$sql = "SELECT * FROM finalisation_prices WHERE finalisation_id = '".$finalisation['id']."'";
+				    	$result_finalisation_prices = $db->query($sql);
+						if ($result_finalisation_prices->num_rows > 0) {
+				    		while($price = $result_finalisation_prices->fetch_assoc()) {
+				    			$finalisation_prices[floatval($price['size'])] = floatval($price['price']);
+				    		}
+				    	}
+	    			}
 
+			    	$finalisation['prices'] = $finalisation_prices;
+			    	$finalisations[$finalisation['id']] = $finalisation;
+	    		}
+	    	}
+	       
+	    	$product['finalisations'] = $finalisations;
 
 
 	    	$sql = "SELECT * FROM shipping";

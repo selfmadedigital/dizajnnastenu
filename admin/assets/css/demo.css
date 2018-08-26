@@ -100,3 +100,7 @@ table td .dropdown-menu, table td .dropdown-menu-left{
 .dropdown-menu li a:hover, .dropdown-menu li a:focus, .dropdown-menu li a:active{
     background-color: #ea4b89;
 }
+
+.checkbox, .radio{
+    margin-top: 0;
+}

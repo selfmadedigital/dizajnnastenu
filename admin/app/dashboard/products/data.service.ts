@@ -33,6 +33,10 @@ export class DataService {
     return this.http.get("/admin/api/product_service.php?target=installations&name=" + product_name.toString()).map((res:Response) => { return res.json(); });
   }
   
+  getProductFinalisations(product_name: string) : any {
+    return this.http.get("/admin/api/product_service.php?target=finalisations&name=" + product_name.toString()).map((res:Response) => { return res.json(); });
+  }
+  
   removeTarget(id, target){
     $.ajax({
       url: "/admin/api/product_service.php?target=" + target + "&id=" + id,

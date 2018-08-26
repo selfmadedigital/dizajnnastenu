@@ -112,8 +112,8 @@
                                             <input class="form-control" id="new-material" type="text" />
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
-                                        <button type="button" class="btn btn-rose btn-fill" (click)="createMaterial()">Pridať nový materiál</button>
+                                    <div class="col-sm-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createMaterial()">Pridať</button>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('material-price')">Pridať hranicu ceny</button>
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('material-price')">Pridať</button>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('price')">Pridať hranicu ceny</button>
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('price')">Pridať</button>
                                     </div>
                                 </div>
                             </div>
@@ -263,7 +263,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-rose btn-fill" (click)="createDiscount()">Pridať hranicu zľavy</button>
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createDiscount()">Pridať</button>
                                     </div>
                                 </div>
                             </div>
@@ -316,7 +316,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-rose btn-fill" (click)="createInstallation()">Pridať hranicu ceny</button>
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createInstallation()">Pridať</button>
                                     </div>
                                 </div>
                             </div>
@@ -329,29 +329,117 @@
                         </div>
                         <div class="card-content">
                             <h4 class="card-title">Finalizácia</h4>
+                            <div class="row">
+                                <label class="col-sm-2 label-on-left">Spôsob kalkulácie</label>
+                                <div class="col-sm-4 checkbox-radios">
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="calculationFinalisationType" checked="true" id="finalisationTypeTable"> Fixne
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="calculationFinalisationType" id="finalisationTypePercentage"> Percentuálne
+                                        </label>
+                                    </div>
+                                </div>
+                                <label class="col-sm-2 label-on-left">Typ finalizácie</label>
+                                <div class="col-sm-4 checkbox-radios">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="multiselect" id="finalisationMultiselect"> Multiselekcia
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="table-responsive">
-                                <table class="table" id="installation-table">
+                                <table class="table" id="finalisations-table">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Náhľad</th>
+                                            <th>Názov</th>
+                                            <th class="finalisation-percentage-column text-center">Cena (%)</th>
                                             <th class="text-right">Akcie</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+                                        <tr *ngFor="let finalisation of finalisations" id="finalisation-{{finalisation.id}}">
+                                            <td class="img-container">
+                                                <img alt="{{finalisation.name}}" src="/img/{{finalisation.img}}">
+                                            </td>
+                                            <td>{{finalisation.name}}</td>
+                                            <td class="finalisation-percentage-column"><input class="form-control text-center" type="number" value="{{finalisation.percentage}}"/></td>
+                                            <td class="td-actions text-right">
+                                                <label class="btn btn-success">
+                                                    <i class="material-icons">add_a_photo</i>
+                                                    <input type="file" class="finalisation-image" data-id="{{finalisation.id}}" style="display: none;" (change)="imageUploaded($event)">
+                                                </label>
+                                                <button type="button" rel="tooltip" class="btn btn-info finalisation-table-button" (click)="selectFinalisation(finalisation.id)">
+                                                    <i class="material-icons">keyboard_arrow_down</i>
+                                                </button>
+                                                <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFinalisation(finalisation.id, finalisation.name)">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <div class="form-group label-floating c">
+                                            <label class="control-label">
+                                                Názov
+                                            </label>
+                                            <input class="form-control" id="new-finalisation" type="text" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 text-right">
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createFinalisation()">Pridať</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" id="finalisation-price-card" style="display:none;">
+                        <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Cenotvorba pre zvolenú finalizáciu</h4>
+                            <div class="table-responsive">
+                                <table class="table" id="finalisation-price-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rozmer</th>
+                                            <th>Cena</th>
+                                            <th class="text-right">Akcie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                     </tbody>
                                 </table>
                                 <hr />
                                 <div class="row">
                                     <div class="col-md-5">
-                                        
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Rozmer (m<sup>2</sup>)
+                                            </label>
+                                            <input class="form-control" id="new-finalisation-price-size" type="text" required="true" />
+                                        </div>
                                     </div>
                                     <div class="col-md-5">
-                                        
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">
+                                                Cena (&euro;)
+                                            </label>
+                                            <input class="form-control" id="new-finalisation-price-price" type="text" required="true" />
+                                        </div>
                                     </div>
                                     <div class="col-md-2 text-right">
-                                        <button type="button" class="btn btn-rose btn-fill">Pridať</button>
+                                        <button type="button" class="btn btn-rose btn-fill" (click)="createTablePriceEntry('finalisation-price')">Pridať</button>
                                     </div>
                                 </div>
                             </div>
