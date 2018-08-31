@@ -18,6 +18,7 @@ var BlogNewComponent = (function () {
         this.inspirations = [];
     }
     BlogNewComponent.prototype.ngOnInit = function () {
+        var ds = this.ds;
         var Upload = function (file, target) {
             this.file = file;
             this.target = target;
@@ -34,6 +35,7 @@ var BlogNewComponent = (function () {
         Upload.prototype.doUpload = function () {
             var that = this;
             var formData = new FormData();
+            var resdata = {};
             // add assoc key values, this will be posts values
             formData.append("file", this.file, this.getName());
             formData.append("upload_file", true);
@@ -50,18 +52,23 @@ var BlogNewComponent = (function () {
                     return myXhr;
                 },
                 complete: function (data) {
-                    console.log(data);
+                    resdata = data;
                 },
                 error: function (error) {
                     // handle error
                 },
-                async: true,
+                async: false,
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 timeout: 60000
             });
+            if (resdata.responseJSON['result'] == '0') {
+                $.each(resdata.responseJSON['errors'], function () {
+                    ds.showNotification("danger", this);
+                });
+            }
         };
         Upload.prototype.progressHandling = function (event) {
             var percent = 0;

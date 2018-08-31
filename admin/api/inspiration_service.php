@@ -40,11 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
-        if(!empty($_POST['id'])){
-            $db->query("UPDATE inspiration SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'");   
+        $response = uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
+        if(!empty($_POST['id']) && $response['result'] == '1'){
+            if(!$db->query("UPDATE inspiration SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'")){
+                $response['result'] = '0';
+                $errors = $response['errors'];
+                array_push($errors, "Problém pri ukladaní do databázy!");
+                $response['errors'] = $errors;
+            }
         }
-        echo json_encode("ok");
+        echo json_encode($response);
     }else{
         if(isset($_POST['id']) && !empty($_POST['id'])){
             $db->query("DELETE FROM inspiration_to_attribute WHERE inspiration_id = '".$_POST['id']."'");

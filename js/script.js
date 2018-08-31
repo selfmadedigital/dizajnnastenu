@@ -224,6 +224,30 @@ function changePage(page, nameid) {
 			});
 	      }
 	    });
+	    
+	    $('#inspiracia .box-custom-color').each(function(i) {
+				if($(this).hasClass('color-half')){
+					$(this).css('background', 'linear-gradient(to right, #884D87 50%, ' + LightenDarkenColor('#884D87', -10) + ' 50%');
+				}else if($(this).hasClass('color-darker')){
+					$(this).css('background-color', LightenDarkenColor('#884D87', -10));
+				}else if($(this).hasClass('color-dark')){
+					$(this).css('background-color', LightenDarkenColor('#884D87', -20));
+				}else{
+					$(this).css('background-color', '#884D87');
+				}
+			});
+	}else if(page == "kontakt"){
+		$('#kontakt .box-custom-color').each(function(i) {
+				if($(this).hasClass('color-half')){
+					$(this).css('background', 'linear-gradient(to right, #414042 50%, ' + LightenDarkenColor('#414042', -10) + ' 50%');
+				}else if($(this).hasClass('color-darker')){
+					$(this).css('background-color', LightenDarkenColor('#414042', -10));
+				}else if($(this).hasClass('color-dark')){
+					$(this).css('background-color', LightenDarkenColor('#414042', -20));
+				}else{
+					$(this).css('background-color', '#414042');
+				}
+			});
 	}else if(page == "blog"){
 		if(nameid === undefined){
 			$.ajax({
@@ -268,6 +292,17 @@ function changePage(page, nameid) {
 				});
 		      }
 		    });
+		    $('#blog .box-custom-color').each(function(i) {
+				if($(this).hasClass('color-half')){
+					$(this).css('background', 'linear-gradient(to right, #884D87 50%, ' + LightenDarkenColor('#884D87', -10) + ' 50%');
+				}else if($(this).hasClass('color-darker')){
+					$(this).css('background-color', LightenDarkenColor('#884D87', -10));
+				}else if($(this).hasClass('color-dark')){
+					$(this).css('background-color', LightenDarkenColor('#884D87', -20));
+				}else{
+					$(this).css('background-color', '#884D87');
+				}
+			});
 		}else{
 			id = nameid.toLowerCase();
 		    page = "blog-clanok";
@@ -473,7 +508,7 @@ function openPopup(data, fullscreen){
 	  self.pageYOffset || document.documentElement.scrollTop  || document.body.scrollTop
 	];
 
-	$('#popup-container').html(data);
+	$('#popup-container').html(data + '<button id="popup-close" class="icon-cross" onClick="closePopup();"></button>');
 	if(fullscreen){
 		$('#popup-container').addClass('fullscreen');
 	}
@@ -487,7 +522,9 @@ function openPopup(data, fullscreen){
 	$('html').css('overflow', 'hidden');
 
 	$('#popup-container button').each(function(i) {
-		$(this).css('background-color', '#' + productData['color']);
+		if($(this).attr('id') != 'popup-close'){
+			$(this).css('background-color', '#' + productData['color']);
+		}
 	});
 
 	$('#popup-container .btn-color').each(function(i) {
@@ -523,7 +560,7 @@ function openMaterialSelection(){
 	}
 	 
 	data += '</div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 }
 
 function openInspirationsPopup(){
@@ -534,14 +571,18 @@ function openInspirationsPopup(){
 	      success: function(data) {
 	      	var popupData = '<div class="row">';
 	      	$.each( data, function(key, value) {
-  				popupData += '<div class="popup-box col-sm-2" style="background-image: url(/img/' + value['img'] + ');"></div>';
+  				popupData += '<div class="popup-box href-box col-sm-2" style="background-image: url(/img/' + value['img'] + ');" onClick="showInspirationId(' + value['id'] + ');" id="inspiration-' + value['id'] + '"><span class="box-meta">#' + pad(value['id'], 5) + '</span></div>';
 			});
 			
 			popupData += '</div>';
 				
-			openPopup(popupData, true);	
+			openPopup(popupData, 1);	
 	      }
 	    });
+}
+
+function showInspirationId(id){
+	$('#inspiration-' + id + ' span').fadeIn(500);
 }
 
 function openFinalisationSelection(){
@@ -563,7 +604,7 @@ function openFinalisationSelection(){
 	}
 	 
 	data += '</div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 }
 
 function openFilterSelection(attribute){
@@ -587,7 +628,7 @@ function openFilterSelection(attribute){
 	}
 	
 	data += '</div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 
 	$('#popup .popup-box').each(function(i) {
 		resizeBox($(this));
@@ -742,7 +783,7 @@ function selectInstallation(requested){
 
 function openAdditionalInfo(){
 	var data = '<div class="row"><div class="col-sm-12">' + productData['long_information'] + '</div></div><div class="row"><div class="col-sm-12 text-right"><button class="btn-close" onClick="closePopup();"><span class="icon-cross"></span>Zatvoriť</button></div></div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 }
 
 function openInstallationSelection(){
@@ -752,7 +793,7 @@ function openInstallationSelection(){
 	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
 	data += '<div class="col-sm-3 popup-box dummy-box"></div>';
 	data += '</div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 }
 
 function openOrderForm(){
@@ -780,7 +821,7 @@ function openOrderForm(){
 	data += '<hr />';
 	data += '<div class="form-group row"><div class="col-sm-12 text-center"><input type="submit" class="btn-color btn-center" value="Odoslať" /><input type="button" class="btn-color btn-center" onClick="closePopup();" value="Zrušiť" /></div></div>';
 	data += '</form></div></div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 
 	$("#same-address").change(function() {
 	    if(this.checked) {
@@ -904,7 +945,7 @@ function openShippingSelection(){
 	}
 	 
 	data += '</div>';
-	openPopup(data, false);
+	openPopup(data, 0);
 }
 
 function LightenDarkenColor(col, amt) {
@@ -1007,7 +1048,7 @@ function openPopupMenu(){
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #414042;" onClick="changePage(\'kontakt\',\'\');closePopup();">Kontakt</div>';
 			data += '<div class="col-sm-3 popup-box box href-box" style="background-color: #006199;" onClick="history.back();">Ísť späť</div>';
 			data += '</div>';
-			openPopup(data, false);
+			openPopup(data, 0);
 }
 
 function scrollContainer(target){
@@ -1043,3 +1084,8 @@ window.setInterval(function(){
 	quotes.fadeOut();
 	$(quotes[Math.floor(Math.random()*quotes.length)]).delay( 800 ).fadeIn();	
 }, 10000);
+
+function pad (str, max) {
+  str = str.toString();
+  return str.length < max ? pad("0" + str, max) : str;
+}

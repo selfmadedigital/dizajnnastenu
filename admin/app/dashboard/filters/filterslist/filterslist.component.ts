@@ -22,6 +22,8 @@ export class FiltersListComponent implements OnInit, AfterViewInit{
     }
     
     imageUploaded(e){
+        var ds = this.ds;
+        
         var Upload = function (file, target, id) {
             this.file = file;
             this.target = target;
@@ -40,6 +42,7 @@ export class FiltersListComponent implements OnInit, AfterViewInit{
         Upload.prototype.doUpload = function () {
             var that = this;
             var formData = new FormData();
+            var resdata = {};
         
             // add assoc key values, this will be posts values
             formData.append("file", this.file, this.getName());
@@ -58,18 +61,26 @@ export class FiltersListComponent implements OnInit, AfterViewInit{
                     return myXhr;
                 },
                 complete: function (data) {
-                    $('tr#' + data.responseJSON['id'] + ' .img-container').html('<img src="/img/' + data.responseJSON['img'] + '" alt="' + data.responseJSON['id'] + '" />');
+                    resdata = data;
                 },
                 error: function (error) {
                     // handle error
                 },
-                async: true,
+                async: false,
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 timeout: 60000
             });
+            
+            if(resdata.responseJSON['result'] == '0'){
+                $.each(resdata.responseJSON['errors'], function(){
+                   ds.showNotification("danger",this); 
+                });
+            }else{
+                $('tr#' + resdata.responseJSON['id'] + ' .img-container').html('<img src="/img/' + resdata.responseJSON['img'] + '" alt="' + resdata.responseJSON['id'] + '" />');
+            }
         };
         
         Upload.prototype.progressHandling = function (event) {

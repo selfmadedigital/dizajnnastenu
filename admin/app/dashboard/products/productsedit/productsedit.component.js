@@ -142,6 +142,7 @@ var ProductsEditComponent = (function () {
     ProductsEditComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         var product_name = this.route.snapshot.params['name'];
+        var ds = this.ds;
         this.ds.getProductMaterials(this.route.snapshot.params['name']).subscribe(function (res) {
             _this.materials = res;
         });
@@ -173,7 +174,7 @@ var ProductsEditComponent = (function () {
         Upload.prototype.doUpload = function () {
             var that = this;
             var formData = new FormData();
-            var result;
+            var resdata = {};
             // add assoc key values, this will be posts values
             formData.append("file", this.file, this.getName());
             formData.append("upload_file", true);
@@ -190,16 +191,20 @@ var ProductsEditComponent = (function () {
                     return myXhr;
                 },
                 complete: function (data) {
-                    result = data;
+                    resdata = data;
                 },
-                async: true,
+                async: false,
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 timeout: 60000
             });
-            return result;
+            if (resdata.responseJSON['result'] == '0') {
+                $.each(resdata.responseJSON['errors'], function () {
+                    ds.showNotification("danger", this);
+                });
+            }
         };
         Upload.prototype.progressHandling = function (event) {
             var percent = 0;

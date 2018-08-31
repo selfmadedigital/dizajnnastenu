@@ -204,7 +204,7 @@ button, .btn-color{
 	color: #942761;
 	background: transparent;
     text-align: center;
-    font-size: 3vw;
+    font-size: 2vw;
     position: relative;
     top: 50%;
     margin-top: -1.7vw;
@@ -213,12 +213,32 @@ button, .btn-color{
     padding-left: 0.5vw;
 }
 
+#inspiracia .btn-menu, #blog .btn-menu{
+	color: #5f205e;
+}
+
+#kontakt .btn-menu{
+	color: #565556;
+}
+
 	.menu-box{
 		cursor: pointer;
 	}
 	
+	.box-menu h1{
+		color: #fff;
+	}
+	
 	.menu-box:hover .btn-menu{
 		color: #e4a2c8;
+	}
+	
+	#inspiracia .menu-box:hover .btn-menu, #blog .menu-box:hover .btn-menu{
+		color: #a75ca5;	
+	}
+	
+	#kontakt .menu-box:hover .btn-menu{
+		color: #909090;	
 	}
 
 button span, .btn-color span{
@@ -511,6 +531,17 @@ input[type="file"] {
 	height: 100vh;
 	background: rgba(255,255,255,0.5);
 	overflow-x: hidden;
+}
+
+.box-meta{
+	    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 120%;
+    display: none;
 }
 
 #popup-container .row{

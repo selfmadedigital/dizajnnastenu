@@ -18,7 +18,6 @@
   	<div id="popup" style="display: none;">
   		<div id="popup-overlay"></div>
   		<div id="popup-container"></div>
-  		<button id="popup-close" class="icon-cross" onClick="closePopup();"></button>
   	</div>
 
     <div class="vertical-center">
@@ -216,10 +215,18 @@
 		    <div class="row subpage" style="display:none;" id="inspiracia">
 		    	<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="row">
-			    		<div class="col-sm-12 box box-color-6">
-					        <a href="" class="box-content box-content-center text-center homepage"><h1>Inšpirácia</h1></a>
-					      </div>
-					 </div>
+				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
+				      		<div class="box-content box-content-center text-center"><h1>Inšpirácia</h1></div>
+				      	</div>
+				    </div>
+			      	<div class="row">
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
+				      		<button class="btn-menu icon-arrow"></button>
+				      	</div>
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+				      		<button class="btn-menu icon-menu"></button>
+				      	</div>
+				     </div>
 					 <div class="row">
 						 <div class="col-sm-12 box box-color-10">
 					        <div class="box-content filter-container">
@@ -291,11 +298,18 @@
 		     <div class="row subpage" style="display:none;" id="blog">
 		    	<div class="col-md-4 col-sm-4 col-xs-12">
 		    		<div class="row">
-			    		<div class="col-md-12 box box-color-7">
-					        
-					        <a href="" class="box-content box-content-center text-center homepage"><h1>Blog</h1></a>
-					      </div>
-					 </div>
+				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
+				      		<div class="box-content box-content-center text-center"><h1>Blog</h1></div>
+				      	</div>
+				    </div>
+			      	<div class="row">
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
+				      		<button class="btn-menu icon-arrow"></button>
+				      	</div>
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+				      		<button class="btn-menu icon-menu"></button>
+				      	</div>
+				     </div>
 					 <div class="row">
 						 <div class="col-md-12 box box-color-10">
 					        <div class="box-content filter-container">
@@ -387,7 +401,19 @@
 		    <div class="row subpage" style="display:none;" id="kontakt">
 		      <div class="col-md-4 col-sm-4 col-xs-12 box box-color-8">
 		        
-		        <a href="" class="box-content box-content-center text-center homepage"><h1>Kontakt</h1></a>
+		        <div class="row">
+				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
+				      		<div class="box-content box-content-center text-center"><h1>Kontakt</h1></div>
+				      	</div>
+				    </div>
+			      	<div class="row">
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
+				      		<button class="btn-menu icon-arrow"></button>
+				      	</div>
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+				      		<button class="btn-menu icon-menu"></button>
+				      	</div>
+				     </div>
 		      </div>
 		      <div class="col-md-8 col-sm-8 col-xs-12 box box-color-half-9-10">
 		        

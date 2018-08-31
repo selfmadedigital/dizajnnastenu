@@ -157,6 +157,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
     
     ngAfterViewInit(): void {
         var product_name = this.route.snapshot.params['name'];
+        var ds = this.ds;
         
         this.ds.getProductMaterials(this.route.snapshot.params['name']).subscribe(res => { 
             this.materials = res;
@@ -195,7 +196,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         Upload.prototype.doUpload = function () {
             var that = this;
             var formData = new FormData();
-            var result;
+            var resdata = {};
         
             // add assoc key values, this will be posts values
             formData.append("file", this.file, this.getName());
@@ -214,9 +215,9 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
                     return myXhr;
                 },
                 complete: function (data) {
-                    result = data;
+                    resdata = data;
                 },
-                async: true,
+                async: false,
                 data: formData,
                 cache: false,
                 contentType: false,
@@ -224,7 +225,11 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
                 timeout: 60000
             });
             
-            return result;
+            if(resdata.responseJSON['result'] == '0'){
+                $.each(resdata.responseJSON['errors'], function(){
+                   ds.showNotification("danger",this); 
+                });
+            }
         };
         
         Upload.prototype.progressHandling = function (event) {
