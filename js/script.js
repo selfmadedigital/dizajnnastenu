@@ -44,10 +44,8 @@ function changePage(page, nameid) {
 	if(page == "produkt"){
 		id = nameid.toLowerCase();
 
-		var data = {
-	      "name": nameid
-	    };
-	    data = $(this).serialize() + "&" + $.param(data);
+		var data = {};
+		data['name'] = nameid;
 	    
 	    $.ajax({
 	      type: "POST",
@@ -71,9 +69,9 @@ function changePage(page, nameid) {
 			if(Object.keys(data['materials']).length > 0){
 				selectMaterial(getFirstKey(data['materials']));
 			}
-			if(Object.keys(data['finalisations']).length > 0){
-				selectFinalisation(getFirstKey(data['finalisations']));
-			}
+			// if(Object.keys(data['finalisations']).length > 0){
+			// 	selectFinalisation(getFirstKey(data['finalisations']));
+			// }
 			selectShipping(0);
 			selectInstallation(0);
 			updatePriceCalculation();
@@ -118,8 +116,20 @@ function changePage(page, nameid) {
 			$('.btn-color>span').each(function(i) {
 				$(this).css('background-color', LightenDarkenColor('#' + data['color'], -20));
 			});
-
-			var ctx = document.getElementById("product-chart").getContext('2d');
+			
+			$('#produkt .btn-menu').each(function(i) {
+				$(this).css('color', LightenDarkenColor('#' + data['color'], -50));
+			});
+			
+			$('#produkt .btn-menu').hover(function(i) {
+				$(this).css('color', LightenDarkenColor('#' + data['color'], 50));
+			}, function () {
+			      $(this).css('color', LightenDarkenColor('#' + data['color'], -50));
+			});
+		
+			var canvas = document.getElementById("product-chart");
+			var ctx = canvas.getContext('2d');
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			var pChart = new Chart(ctx, {
 			    type: 'line',
 			    data: {
@@ -128,10 +138,10 @@ function changePage(page, nameid) {
 			            label: '',
 			            data: data_values,
 			            backgroundColor: [
-			                'rgba(196, 28, 114, 0.5)',
+			                '#' + data['color'],
 			            ],
 			            borderColor: [
-			                'rgba(158,31,99,1)',
+			                '#' + data['color'],
 			            ],
 			            borderWidth: 1
 			        }]
@@ -220,7 +230,7 @@ function changePage(page, nameid) {
 	      			value['color'] = "";
 	      		}
 
-  				$('#inspiration-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-6 col-sm-6 col-xs-12 box box-double box-color-' + color + '"><div class="box-content box-image"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /></div></div>');
+  				$('#inspiration-container').append('<div data-category="' + value['category'] + '" data-room="' + value['room'] + '" data-color="' + value['color'] + '" class="col-md-6 col-sm-6 col-xs-12 box box-double href-box box-color-' + color + '"><div class="box-content box-image" onClick="toggleInspirationId(' + value['id'] + ');" id="inspiration-' + value['id'] + '"><img src="/img/' + value['img'] + '" alt="' + value['name'] + '" /><span class="box-meta">#' + pad(value['id'], 5) + '</span></div></div>');
 			});
 	      }
 	    });
@@ -342,7 +352,7 @@ function changePage(page, nameid) {
 	}
 
 	$('.subpage.active .box').each(function(i) {
-		$(this).fadeTo( Math.floor((Math.random() * 2000) + 200), 0);
+		$(this).fadeTo( Math.floor((Math.random() * 1000) + 200), 0);
 	});
 
 	if($('.subpage.active').length == 0){
@@ -351,7 +361,7 @@ function changePage(page, nameid) {
 
 	var finalOpacity = 1;
 	
-	$('.subpage.active').fadeOut(1000, function(){
+	$('.subpage.active').fadeOut(500, function(){
 		$('#' + page + ' .box').each(function(i) {
 			$(this).css('display', 'none');
 		});
@@ -364,7 +374,7 @@ function changePage(page, nameid) {
 				}else{
 					finalOpacity = 1;
 				}
-				$(this).fadeTo( Math.floor((Math.random() * 2000) + 200), finalOpacity);
+				$(this).fadeTo( Math.floor((Math.random() * 1000) + 200), finalOpacity);
 				resizeBox($(this));
 			});
 		});
@@ -571,7 +581,7 @@ function openInspirationsPopup(){
 	      success: function(data) {
 	      	var popupData = '<div class="row">';
 	      	$.each( data, function(key, value) {
-  				popupData += '<div class="popup-box href-box col-sm-2" style="background-image: url(/img/' + value['img'] + ');" onClick="showInspirationId(' + value['id'] + ');" id="inspiration-' + value['id'] + '"><span class="box-meta">#' + pad(value['id'], 5) + '</span></div>';
+  				popupData += '<div class="popup-box href-box col-sm-2" style="background-image: url(/img/' + value['img'] + ');" onClick="toggleInspirationId(' + value['id'] + ');" id="inspiration-' + value['id'] + '"><span class="box-meta">#' + pad(value['id'], 5) + '</span></div>';
 			});
 			
 			popupData += '</div>';
@@ -581,8 +591,13 @@ function openInspirationsPopup(){
 	    });
 }
 
-function showInspirationId(id){
-	$('#inspiration-' + id + ' span').fadeIn(500);
+function toggleInspirationId(id){
+	var element = $('#inspiration-' + id + ' span');
+	if(element.is(':hidden')){
+		element.fadeIn(500);	
+	}else{
+		element.fadeOut(500);
+	}
 }
 
 function openFinalisationSelection(){

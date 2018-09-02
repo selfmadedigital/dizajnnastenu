@@ -41,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 $o->product_name = $row['product_name'];
                 $o->material_id = $row['material_id'];
                 $o->material_name = $row['material_name'];
-                $o->finalisation_id = $row['finalisation_id'];
                 $o->installation = $row['installation'];
                 $o->quantity = $row['quantity'];
                 $o->width = $row['width'];

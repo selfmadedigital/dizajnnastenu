@@ -14,7 +14,7 @@ function uploadImage($image, $target_dir){
     if (file_exists($target_file)) {
         array_push($errors, "Súbor s daným názvom už existuje!");
     }
-    if ($image["size"] > 500000) {
+    if ($image["size"] > 2000000) {
         array_push($errors, "Veľkosť súboru väčšia ako 2MB!");
     }
     

@@ -2,7 +2,6 @@
 	require_once("db.php");
 	header('Content-Type: application/json; charset=utf-8');
 
-	$product_name = "Fototapety";
 	$product_name = $_POST['name'];
 
 	$sql = "SELECT * FROM product WHERE UPPER(name) = UPPER('".$product_name."')";
