@@ -16,6 +16,7 @@ var ordersdetail_component_1 = require('./orders/ordersdetail/ordersdetail.compo
 var shippingslist_component_1 = require('./shippings/shippingslist/shippingslist.component');
 var shippingsedit_component_1 = require('./shippings/shippingsedit/shippingsedit.component');
 var shippingsnew_component_1 = require('./shippings/shippingsnew/shippingsnew.component');
+var userslist_component_1 = require('./users/userslist/userslist.component');
 //
 exports.MODULE_ROUTES = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -35,6 +36,7 @@ exports.MODULE_ROUTES = [
     { path: 'shippings/list', component: shippingslist_component_1.ShippingsListComponent },
     { path: 'shippings/edit/:id', component: shippingsedit_component_1.ShippingsEditComponent },
     { path: 'shippings/new', component: shippingsnew_component_1.ShippingsNewComponent },
+    { path: 'users/list', component: userslist_component_1.UsersListComponent },
 ];
 //
 exports.MODULE_COMPONENTS = [
@@ -54,5 +56,6 @@ exports.MODULE_COMPONENTS = [
     shippingslist_component_1.ShippingsListComponent,
     shippingsedit_component_1.ShippingsEditComponent,
     shippingsnew_component_1.ShippingsNewComponent,
+    userslist_component_1.UsersListComponent,
 ];
 //# sourceMappingURL=dashboard.routes.js.map

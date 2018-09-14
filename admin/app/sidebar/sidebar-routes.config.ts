@@ -24,4 +24,6 @@ export const ROUTES: RouteInfo[] = [
     { path: 'shippings/new', title: 'Preprava', menuType: MenuType.LEFT, icon: 'material-icons' },
     
     { path: 'user/passwordchange', title: 'Používateľ', menuType: MenuType.LEFT, icon: 'material-icons' },
+    
+    { path: 'users/list', title: 'Užívatelia', menuType: MenuType.LEFT, icon: 'material-icons' },
 ];

@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var data_service_1 = require("../data.service");
 var router_1 = require('@angular/router');
+var common_1 = require('@angular/common');
 var ProductsEditComponent = (function () {
-    function ProductsEditComponent(ds, route, router) {
+    function ProductsEditComponent(ds, route, router, location) {
         this.ds = ds;
         this.route = route;
         this.router = router;
+        this.location = location;
         this.materials = [];
         this.prices = [];
     }
@@ -282,8 +284,8 @@ var ProductsEditComponent = (function () {
                 type: "POST",
                 url: "/admin/api/product_service.php",
                 data: data,
-                success: function (data) {
-                }
+                async: false,
+                success: function (data) { }
             });
         });
         $('input[type=checkbox][name=multiselect]').change(function () {
@@ -302,6 +304,21 @@ var ProductsEditComponent = (function () {
                 }
             });
         });
+    };
+    ProductsEditComponent.prototype.changeFinalisationCalculationType = function (value) {
+        var data = {};
+        data['target'] = 'finalisation_tableprice';
+        data['value'] = value;
+        data['product_name'] = this.route.snapshot.params['name'];
+        $.ajax({
+            type: "POST",
+            url: "/admin/api/product_service.php",
+            data: data,
+            async: false,
+            success: function (data) {
+            }
+        });
+        this.router.navigate(['/products/list']);
     };
     ProductsEditComponent.prototype.createTablePriceEntry = function (target) {
         var dataprice = {};
@@ -563,7 +580,7 @@ var ProductsEditComponent = (function () {
             templateUrl: 'productsedit.component.html',
             providers: [data_service_1.DataService]
         }), 
-        __metadata('design:paramtypes', [data_service_1.DataService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [data_service_1.DataService, router_1.ActivatedRoute, router_1.Router, common_1.Location])
     ], ProductsEditComponent);
     return ProductsEditComponent;
 }());

@@ -17,5 +17,6 @@ exports.ROUTES = [
     { path: 'shippings/edit', title: 'Preprava', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
     { path: 'shippings/new', title: 'Preprava', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
     { path: 'user/passwordchange', title: 'Používateľ', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
+    { path: 'users/list', title: 'Užívatelia', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
 ];
 //# sourceMappingURL=sidebar-routes.config.js.map

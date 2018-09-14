@@ -1,0 +1,51 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">attach_money</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Užívatelia</h4>
+                        <div class="table-responsive">
+                            <table class="table" id="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Meno</th>
+                                        <th>Email</th>
+                                        <th>Posledné prihlásenie</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of users" id="{{user.id}}">
+                                        <td>{{user.username}}</td>
+                                        <td>{{user.email}}</td>
+                                        <td>{{user.lastlogin | date:'dd.MM.yyyy hh:mm'}}</td>
+                                        <td class="td-actions text-right">
+                                            <div class="dropdown" style="display: inline-block; width: 50%;">
+                                                <button href="#pablo" class="dropdown-toggle btn btn-info btn-round btn-block" data-toggle="dropdown">
+                                                    <span>{{user.rolename}}</span>
+                                                    <b class="caret"></b>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-left">
+                                                    <li *ngFor="let role of roles">
+                                                        <a (click)="changeRole(user.id,role.id)">{{role.name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeUser(user.id, user.username)" *ngIf="!isCurrentUser(user.id)">
+                                               <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

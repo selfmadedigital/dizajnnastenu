@@ -11,13 +11,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var sidebar_routes_config_1 = require('./sidebar-routes.config');
 var sidebar_metadata_1 = require('./sidebar.metadata');
+var http_1 = require("@angular/http");
 var SidebarComponent = (function () {
-    function SidebarComponent() {
+    function SidebarComponent(http) {
+        this.http = http;
     }
     SidebarComponent.prototype.ngOnInit = function () {
         $.getScript('../admin/assets/js/sidebar-moving-tab.js');
         this.menuItems = sidebar_routes_config_1.ROUTES.filter(function (menuItem) { return menuItem.menuType !== sidebar_metadata_1.MenuType.BRAND; });
-        this.loggedUser = "Mihi";
+    };
+    SidebarComponent.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        this.http.get("/admin/api/auth_service.php?target=active").map(function (res) { return res.json(); }).subscribe(function (res) {
+            _this.currentUser = res;
+        });
     };
     SidebarComponent = __decorate([
         core_1.Component({
@@ -25,7 +32,7 @@ var SidebarComponent = (function () {
             selector: 'sidebar-cmp',
             templateUrl: 'sidebar.component.html',
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [http_1.Http])
     ], SidebarComponent);
     return SidebarComponent;
 }());

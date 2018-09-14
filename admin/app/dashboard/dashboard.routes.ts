@@ -23,6 +23,7 @@ import { ShippingsListComponent } from './shippings/shippingslist/shippingslist.
 import { ShippingsEditComponent } from './shippings/shippingsedit/shippingsedit.component';
 import { ShippingsNewComponent } from './shippings/shippingsnew/shippingsnew.component';
 
+import { UsersListComponent } from './users/userslist/userslist.component';
 //
 export const MODULE_ROUTES: Route[] =[
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -50,7 +51,7 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'shippings/edit/:id', component: ShippingsEditComponent },
     { path: 'shippings/new', component: ShippingsNewComponent },
 
-
+    { path: 'users/list', component: UsersListComponent },
 ]
 //
 export const MODULE_COMPONENTS = [
@@ -77,4 +78,6 @@ export const MODULE_COMPONENTS = [
     ShippingsListComponent,
     ShippingsEditComponent,
     ShippingsNewComponent,
+    
+    UsersListComponent,
 ]

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { DataService } from "../data.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
 
 declare var $:any;
 
@@ -18,7 +19,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
     materials: any[] = [];
     prices: any[] = [];
 
-    constructor(private ds: DataService, private route: ActivatedRoute, private router: Router) {}
+    constructor(private ds: DataService, private route: ActivatedRoute, private router: Router, private location: Location) {}
 
     ngOnInit(){
         // Init Tooltips
@@ -318,9 +319,8 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
                 type: "POST",
         		url: "/admin/api/product_service.php",
         		data: data,
-        		success: function(data){
-        		         
-        		}
+        		async: false,
+        		success: function(data){}
             });
         });
         
@@ -344,6 +344,26 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         		}
             });
         });
+    }
+    
+    changeFinalisationCalculationType(value: string){
+        var data = {};
+        
+            data['target'] = 'finalisation_tableprice';
+            data['value'] = value;
+            data['product_name'] = this.route.snapshot.params['name'];
+            
+            $.ajax({
+                type: "POST",
+        		url: "/admin/api/product_service.php",
+        		data: data,
+        		async: false,
+        		success: function(data){
+        		    
+        		}
+            });
+            
+            this.router.navigate(['/products/list']);
     }
     
     createTablePriceEntry(target: string){

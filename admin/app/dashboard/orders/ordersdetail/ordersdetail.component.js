@@ -34,7 +34,7 @@ var OrdersDetailComponent = (function () {
                 installation = 'Áno';
             }
             $('#order-id').text(res['id']);
-            $('#product-name').text("");
+            $('#product-name').text(product);
             $('#product-material').text(res['material_name']);
             $('#product-installation').text(installation);
             $('#product-finalisation').text(res['finalisation_id']);

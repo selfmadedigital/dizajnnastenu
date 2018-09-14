@@ -331,18 +331,20 @@
                             <h4 class="card-title">Finalizácia</h4>
                             <div class="row">
                                 <label class="col-sm-2 label-on-left">Spôsob kalkulácie</label>
-                                <div class="col-sm-4 checkbox-radios">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="calculationFinalisationType" checked="true" id="finalisationTypeTable"> Fixne
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="calculationFinalisationType" id="finalisationTypePercentage"> Percentuálne
-                                        </label>
-                                    </div>
+                                <div class="col-sm-4">
+                                <!--    <div class="radio">-->
+                                <!--        <label>-->
+                                <!--            <input type="radio" name="calculationFinalisationType" checked="true" id="finalisationTypeTable"> Fixne-->
+                                <!--        </label>-->
+                                <!--    </div>-->
+                                <!--    <div class="radio">-->
+                                <!--        <label>-->
+                                <!--            <input type="radio" name="calculationFinalisationType" id="finalisationTypePercentage"> Percentuálne-->
+                                <!--        </label>-->
+                                <!--    </div>-->
+                                <button type="button" rel="tooltip" class="btn btn-info" (click)="changeFinalisationCalculationType('1')">PREPNÚŤ</button>
                                 </div>
+                                
                                 <label class="col-sm-2 label-on-left">Typ finalizácie</label>
                                 <div class="col-sm-4 checkbox-radios">
                                     <div class="checkbox">
