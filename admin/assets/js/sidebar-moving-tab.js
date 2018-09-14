@@ -115,16 +115,19 @@ function animateMovingTab(){
 
 function setMovingTabPosition(){
     $currentActive = mda.misc.sidebarMenuActive;
-    li_distance = $currentActive.parent().position().top - 10;
-
-    if($currentActive.closest('.collapse').length != 0){
-        parent_distance = $currentActive.closest('.collapse').parent().position().top;
-        li_distance = li_distance + parent_distance;
+    li_pos = $currentActive.parent().position();
+    if(li_pos !== undefined){
+        li_distance = li_pos.top - 10;
+        
+        if($currentActive.closest('.collapse').length != 0){
+            parent_distance = $currentActive.closest('.collapse').parent().position().top;
+            li_distance = li_distance + parent_distance;
+        }
+    
+        mda.misc.movingTab.css({
+            'transform':'translate3d(0px,' + li_distance + 'px, 0)'
+        });
     }
-
-    mda.misc.movingTab.css({
-        'transform':'translate3d(0px,' + li_distance + 'px, 0)'
-    });
 }
 function setParentCollapse(){
     if(mda.misc.isChild == true){

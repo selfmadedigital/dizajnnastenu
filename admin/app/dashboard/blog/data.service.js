@@ -29,6 +29,7 @@ var DataService = (function () {
             type: "POST",
             url: "/admin/api/blog_service.php",
             data: data,
+            async: false,
             success: function (data) {
                 console.log(data);
             }

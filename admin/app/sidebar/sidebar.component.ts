@@ -13,6 +13,7 @@ declare var $:any;
 
 export class SidebarComponent implements OnInit {
     public menuItems: any[];
+    public currentUser: any;
     
     constructor(private http : Http){
     }
@@ -25,7 +26,10 @@ export class SidebarComponent implements OnInit {
     
     ngAfterViewInit(): void {
         this.http.get("/admin/api/auth_service.php?target=active").map((res:Response) => { return res.json(); }).subscribe(res => { 
-            this.currentUser = res;
+            this.currentUserId = res['id'];
+            this.currentUserName = res['username'].toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
         });
     }
 }

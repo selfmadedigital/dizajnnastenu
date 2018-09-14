@@ -1,7 +1,7 @@
 "use strict";
 // import { DashboardComponent } from './dashboard.component';
 var home_component_1 = require('./home/home.component');
-var passwordchange_component_1 = require('./user/passwordchange/passwordchange.component');
+var passwordchange_component_1 = require('./users/passwordchange/passwordchange.component');
 var productslist_component_1 = require('./products/productslist/productslist.component');
 var productsedit_component_1 = require('./products/productsedit/productsedit.component');
 var bloglist_component_1 = require('./blog/bloglist/bloglist.component');

@@ -25,9 +25,9 @@ export class OrdersDetailComponent implements OnInit, AfterViewInit{
         $('[rel="tooltip"]').tooltip();
         
         this.ds.getOrder(this.route.snapshot.params['id']).subscribe(res => { 
-            // var product = res['product_name'].toLowerCase().replace(/\b[a-z]/g, function(letter) {
-            //     return letter.toUpperCase();
-            // });
+            var product = res['product_name'].toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                return letter.toUpperCase();
+            });
             
             var installation = 'Nie';
             if(res['installation'] == "1"){

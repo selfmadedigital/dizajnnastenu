@@ -527,6 +527,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
           url: "/admin/api/product_service.php",
           type: 'POST',
           data: formdata,
+          async: false,
           complete: function(data) {
             console.log(data);
           }

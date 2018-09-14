@@ -22,6 +22,7 @@ export class DataService {
         type: "POST",
 		url: "/admin/api/inspiration_service.php",
 		data: data,
+		async: false,
 		success: function(data){
 		    console.log(data);
         }

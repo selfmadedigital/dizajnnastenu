@@ -458,6 +458,7 @@ var ProductsEditComponent = (function () {
             url: "/admin/api/product_service.php",
             type: 'POST',
             data: formdata,
+            async: false,
             complete: function (data) {
                 console.log(data);
             }

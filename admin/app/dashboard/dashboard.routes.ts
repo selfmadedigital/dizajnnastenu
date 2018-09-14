@@ -1,7 +1,7 @@
 import { Route, RouterModule } from '@angular/router';
 // import { DashboardComponent } from './dashboard.component';
 import { HomeComponent } from './home/home.component';
-import { PasswordChangeComponent } from './user/passwordchange/passwordchange.component';
+import { PasswordChangeComponent } from './users/passwordchange/passwordchange.component';
 
 import { ProductsListComponent } from './products/productslist/productslist.component';
 import { ProductsEditComponent } from './products/productsedit/productsedit.component';

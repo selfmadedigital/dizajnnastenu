@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         class Order {}
         
         if ( isset( $_GET['id'] ) && !empty( $_GET['id'] ) ){
-                $result = $db->query("SELECT orders.*, shipping.name as shipping_name, shipping.price as shipping_price, order_status.name as status_name, order_status.state as status_state, product_materials.name as material_name FROM orders JOIN shipping ON orders.shipping_id = shipping.id JOIN order_status ON orders.status = order_status.id JOIN product_materials ON orders.material_id = product_materials.id WHERE orders.id = '".$_GET['id']."'");
+                $result = $db->query("SELECT orders.*, shipping.name as shipping_name, shipping.price as shipping_price, order_status.name as status_name, order_status.state as status_state, product_materials.name as material_name FROM orders LEFT JOIN shipping ON orders.shipping_id = shipping.id LEFT JOIN order_status ON orders.status = order_status.id LEFT JOIN product_materials ON orders.material_id = product_materials.id WHERE orders.id = '".$_GET['id']."'");
             
             $row = $result->fetch_assoc();
                 $o = new Order();

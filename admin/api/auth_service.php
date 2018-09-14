@@ -29,6 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $u->username = $auth->getUsername();
                 
             echo json_encode($u);
+        }else if($_GET['target'] == 'isadmin'){
+            class Response {}
+        
+            $result = $db->query("SELECT roles_mask FROM users WHERE id = '".$_GET['id']."'");
+            $result->fetch_assoc();
+                    
+            echo json_encode($result['roles_mask']);
         }
     }else{
         class User {}

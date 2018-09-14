@@ -33,25 +33,79 @@ export class UsersListComponent implements OnInit, AfterViewInit{
         });
     }
     
+    changeRole(userid: string, roleid: string){
+        if(!isAdmin()){
+            this.ds.showNotification('danger', 'Nemáte opávnenie na zmenu užívateľa!')
+        }else{
+            var data = {};
+        
+        data['userid'] = userid;
+        data['roleid'] = roleid;
+        data['target'] = 'role';
+        
+            $.ajax({
+                type: "POST",
+        		url: "/admin/api/auth_service.php",
+        		data: data,
+        		async: false,
+        		success: function(data){
+        		    
+        		}
+            });
+        }
+    }
+    
     removeUser(id: string, username: string) {
-        swal({
-          title: 'Naozaj odstrániť užívateľa ' + username + '?',
-          type: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#4caf50',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Áno odstrániť!',
-          cancelButtonText: 'Zrušiť'
-          }).then((result) => {
-            if (result.value) {
-                this.ds.removeFilter(id);
-                this.ds.showNotification("success","Užívateľ <b>" + username + "</b> bol úspešne odstránený!");
-                $('tr#'+id).hide();
-            }
-        })
+        if(!isAdmin()){
+            this.ds.showNotification('danger', 'Nemáte opávnenie na odstránenie užívateľa!')
+        }else{
+            swal({
+              title: 'Naozaj odstrániť užívateľa ' + username + '?',
+              type: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#4caf50',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Áno odstrániť!',
+              cancelButtonText: 'Zrušiť'
+              }).then((result) => {
+                if (result.value) {
+                    this.ds.removeUser(id);
+                    this.ds.showNotification("success","Užívateľ <b>" + username + "</b> bol úspešne odstránený!");
+                    $('tr#'+id).hide();
+                }
+            })
+        }
+    }
+    
+    createUser() {
+        if(!isAdmin()){
+            this.ds.showNotification('danger', 'Nemáte opávnenie na odstránenie užívateľa!')
+        }else{
+            //
+        }
+    }
+    
+    isAdmin(id){
+            $.ajax({
+                type: "GET",
+        		url: "/admin/api/auth_service.php?target=isadmin&id=" + $('#userid').val(),
+        		data: data,
+        		async: false,
+        		success: function(data){
+        		    if(data == '1'){
+        		        return true;
+        		    }else{
+        		        return false;
+        		    }
+        		}
+            });
     }
     
     public isCurrentUser(id){
-        return true;
+            if(id == $('#userid').val()){
+                return true;
+            }else{
+                return false;
+            }
     }
 }

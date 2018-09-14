@@ -23,7 +23,10 @@ var SidebarComponent = (function () {
     SidebarComponent.prototype.ngAfterViewInit = function () {
         var _this = this;
         this.http.get("/admin/api/auth_service.php?target=active").map(function (res) { return res.json(); }).subscribe(function (res) {
-            _this.currentUser = res;
+            _this.currentUserId = res['id'];
+            _this.currentUserName = res['username'].toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                return letter.toUpperCase();
+            });
         });
     };
     SidebarComponent = __decorate([

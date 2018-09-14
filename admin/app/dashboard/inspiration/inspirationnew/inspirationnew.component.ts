@@ -99,43 +99,9 @@ export class InspirationNewComponent implements OnInit{
         // Init Tooltips
         $('[rel="tooltip"]').tooltip();
         $.getScript('/admin/assets/js/plugins/jquery.tagsinput.js');
-        
-        var filters = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 100,
-            remote: {
-                url: '/admin/api/filter_service.php?mode=list',
-                filter: function(list) {
-        		  return $.map(list, function(name) {
-        			return { name: name }; });
-        		}
-            }
-        });
-        
-        filters.initialize();
-        
-        var countries = new Bloodhound({
-    	  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-    	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-    	  prefetch: {
-    		url: '/admin/api/inspiration_service.php',
-    		filter: function(list) {
-    		  return $.map(list, function(name) {
-    			return { name: name }; });
-    		}
-    	  }
-    	});
-    	countries.initialize();
-    
-    	$('.tagsinput').tagsinput({
-    	  typeaheadjs: {
-    		name: 'f',
-    		displayKey: 'name',
-    		valueKey: 'name',
-    		source: filters.ttAdapter()
-    	  }
-    	});
+            $('.tagsinput').tagsinput({
+                tagClass: ' tag-rose '
+            });
     }
     
     onSubmit() {
