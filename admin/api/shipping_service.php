@@ -31,9 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode('ok');    
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        $response = uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
+        $response = uploadImage($_FILES["file"], $img_folder_path.$_POST['target']."/");
         if(!empty($_POST['id']) && $response['result'] == '1'){
-            if(!$db->query("UPDATE shipping SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'")){
+            $filename = preg_replace('/\s+/', '_', basename($_FILES["file"]["name"]));
+            if(!$db->query("UPDATE shipping SET img = '".$_POST['target']."/".$filename."' WHERE id = '".$_POST['id']."'")){
                 $response['result'] = '0';
                 $errors = $response['errors'];
                 array_push($errors, "Problém pri ukladaní do databázy!");

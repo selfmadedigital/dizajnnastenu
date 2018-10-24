@@ -37,7 +37,7 @@ export class ShippingsListComponent implements OnInit, AfterViewInit{
           confirmButtonText: 'Áno odstrániť!',
           cancelButtonText: 'Zrušiť'
           }).then((result) => {
-            if (result.value) {
+            if (result) {
                 this.ds.removeShipping(id);
                 this.ds.showNotification("success","Preprava <b>" + name + "</b> bola úspešne odstránená!");
                 $('tr#'+id).hide();

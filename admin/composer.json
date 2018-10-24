@@ -2,6 +2,7 @@
     "require": {
         "delight-im/auth": "^3.1",
         "simple-crud/simple-crud": "^6.12",
-        "itsjavi/bootstrap-colorpicker": "^2.5"
+        "itsjavi/bootstrap-colorpicker": "^2.5",
+        "spatie/analytics-statistics": "^1.0"
     }
 }

@@ -7,14 +7,8 @@
                         <i class="material-icons">equalizer</i>
                     </div>
                     <div class="card-content">
-                        <p class="category">Stats</p>
-                        <h3 class="card-title">184</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons text-danger">warning</i>
-                            <a href="#pablo">Get More Space...</a>
-                        </div>
+                        <p class="category">Počet objednávok</p>
+                        <h3 class="card-title">{{orderscount}}</h3>
                     </div>
                 </div>
             </div>
@@ -24,13 +18,8 @@
                         <i class="material-icons">equalizer</i>
                     </div>
                     <div class="card-content">
-                        <p class="category">Stats</p>
-                        <h3 class="card-title">75.521</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">local_offer</i> Google Analytics
-                        </div>
+                        <p class="category">Počet zákazníkov</p>
+                        <h3 class="card-title">{{customerscount}}</h3>
                     </div>
                 </div>
             </div>
@@ -40,13 +29,8 @@
                         <i class="material-icons">equalizer</i>
                     </div>
                     <div class="card-content">
-                        <p class="category">Stats</p>
-                        <h3 class="card-title">$3,245</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">date_range</i> Last 24 Hours
-                        </div>
+                        <p class="category">Počet článkov</p>
+                        <h3 class="card-title">{{blogscount}}</h3>
                     </div>
                 </div>
             </div>
@@ -56,214 +40,187 @@
                         <i class="material-icons">equalizer</i>
                     </div>
                     <div class="card-content">
-                        <p class="category">Stats</p>
-                        <h3 class="card-title">+245</h3>
+                        <p class="category">Počet inšpirácií</p>
+                        <h3 class="card-title">{{inspirationscount}}</h3>
                     </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-tabs" data-background-color="rose">
+                        <div class="nav-tabs-navigation">
+                            <div class="nav-tabs-wrapper">
+                                <span class="nav-tabs-title">Reporty chýb</span>
+                                <ul class="nav nav-tabs" data-tabs="tabs">
+                                    <li class="active">
+                                        <a href="#products" data-toggle="tab">
+                                            Produkty
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#blog" data-toggle="tab">
+                                            Blog
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#inspirations" data-toggle="tab">
+                                            Inšpirácia
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#filters" data-toggle="tab">
+                                            Filtre
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#shippings" data-toggle="tab">
+                                            Preprava
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="products">
+                                <table class="table">
+                                    <tbody>
+                                        <tr *ngFor="let product_report of product_reports" id="product-{{product_report.id}}">
+                                            <td>{{product_report.message}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="blog">
+                                <table class="table">
+                                    <tbody>
+                                        <tr *ngFor="let blog_report of blog_reports" id="blog-{{blog_report.id}}">
+                                            <td>{{blog_report.message}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="inspirations">
+                                <table class="table">
+                                    <tbody>
+                                        <tr *ngFor="let inspiration_report of inspiration_reports" id="inspiration-{{inspiration_report.id}}">
+                                            <td>{{inspiration_report.message}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="filters">
+                                <table class="table">
+                                    <tbody>
+                                        <tr *ngFor="let filter_report of filter_reports" id="filter-{{filter_report.id}}">
+                                            <td>{{filter_report.message}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="shippings">
+                                <table class="table">
+                                    <tbody>
+                                        <tr *ngFor="let shipping_report of shipping_reports" id="shipping-{{shipping_report.id}}">
+                                            <td>{{shipping_report.message}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header card-header-icon" data-background-color="red">
-                        <i class="material-icons">language</i>
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">equalizer</i>
                     </div>
                     <div class="card-content">
-                        <h4 class="card-title">Visits</h4>
+                        <h4 class="card-title">Počet návštevˇ</h4>
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="table-responsive table-sales">
+                            <div class="col-md-12">
+                                <div id="visitsChart" class="ct-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">equalizer</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Prehliadače</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
                                     <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Prehliadač</th>
+                                                <th class="text-center">Počet</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/US.png">
-                                                    </div>
-                                                </td>
-                                                <td>USA</td>
-                                                <td class="text-right">
-                                                    2.920
-                                                </td>
-                                                <td class="text-right">
-                                                    53.23%
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/DE.png">
-                                                    </div>
-                                                </td>
-                                                <td>Germany</td>
-                                                <td class="text-right">
-                                                    1.300
-                                                </td>
-                                                <td class="text-right">
-                                                    20.43%
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/AU.png">
-                                                    </div>
-                                                </td>
-                                                <td>Australia</td>
-                                                <td class="text-right">
-                                                    760
-                                                </td>
-                                                <td class="text-right">
-                                                    10.35%
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/GB.png">
-                                                    </div>
-                                                </td>
-                                                <td>United Kingdom</td>
-                                                <td class="text-right">
-                                                    690
-                                                </td>
-                                                <td class="text-right">
-                                                    7.87%
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/RO.png">
-                                                    </div>
-                                                </td>
-                                                <td>Romania</td>
-                                                <td class="text-right">
-                                                    600
-                                                </td>
-                                                <td class="text-right">
-                                                    5.94%
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="flag">
-                                                        <img src="/admin/assets/img/flags/BR.png">
-                                                    </div>
-                                                </td>
-                                                <td>Brasil</td>
-                                                <td class="text-right">
-                                                    550
-                                                </td>
-                                                <td class="text-right">
-                                                    4.34%
-                                                </td>
+                                            <tr *ngFor="let browser of browsers">
+                                                <td>{{browser.browser}}</td>
+                                                <td class="text-center">{{browser.sessions}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-md-offset-1">
-                                <div id="worldMap" class="map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">equalizer</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Podstránky</h4>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Podstránka</th>
+                                                <th class="text-center">Počet</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let page of pages">
+                                                <td>{{page.url}}</td>
+                                                <td class="text-center">{{page.pageViews}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card card-chart">
-                    <div class="card-header" data-background-color="green" data-header-animation="true">
-                        <div class="ct-chart" id="dailySalesChart"></div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-actions">
-                            <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                <i class="material-icons">build</i> Fix Header!
-                            </button>
-                            <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                <i class="material-icons">refresh</i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                <i class="material-icons">edit</i>
-                            </button>
-                        </div>
-                        <h4 class="card-title">Daily Sales</h4>
-                        <p class="category">
-                            <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">access_time</i> updated 4 minutes ago
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-chart">
-                    <div class="card-header" data-background-color="orange" data-header-animation="true">
-                        <div class="ct-chart" id="completedTasksChart"></div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-actions">
-                            <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                <i class="material-icons">build</i> Fix Header!
-                            </button>
-                            <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                <i class="material-icons">refresh</i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                <i class="material-icons">edit</i>
-                            </button>
-                        </div>
-                        <h4 class="card-title">Completed Tasks</h4>
-                        <p class="category">Last Campaign Performance</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">access_time</i> campaign sent 2 days ago
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card card-chart">
-                    <div class="card-header" data-background-color="red" data-header-animation="true">
-                        <div class="ct-chart" id="websiteViewsChart"></div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-actions">
-                            <button type="button" class="btn btn-danger btn-simple fix-broken-card">
-                                <i class="material-icons">build</i> Fix Header!
-                            </button>
-                            <button type="button" class="btn btn-info btn-simple" rel="tooltip" data-placement="bottom" title="Refresh">
-                                <i class="material-icons">refresh</i>
-                            </button>
-                            <button type="button" class="btn btn-default btn-simple" rel="tooltip" data-placement="bottom" title="Change Date">
-                                <i class="material-icons">edit</i>
-                            </button>
-                        </div>
-                        <h4 class="card-title">Website Views</h4>
-                        <p class="category">Last Campaign Performance</p>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons">access_time</i> campaign sent 2 days ago
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
     </div>
 </div>

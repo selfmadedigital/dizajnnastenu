@@ -86,7 +86,9 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         $('#finalisation-price-card').show();
     }
     
-    imageUploaded(e){
+    imageUploaded(e, target: string){
+        var ds = this.ds;
+        
         var Upload = function (file, target, id) {
             this.file = file;
             this.target = target;
@@ -105,6 +107,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         Upload.prototype.doUpload = function () {
             var that = this;
             var formData = new FormData();
+            var resdata = {};
         
             // add assoc key values, this will be posts values
             formData.append("file", this.file, this.getName());
@@ -123,18 +126,26 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
                     return myXhr;
                 },
                 complete: function (data) {
-                    $('tr#' + data.responseJSON['id'] + ' .img-container').html('<img src="/img/' + data.responseJSON['img'] + '" alt="' + data.responseJSON['id'] + '" />');
+                    resdata = data;
                 },
                 error: function (error) {
                     // handle error
                 },
-                async: true,
+                async: false,
                 data: formData,
                 cache: false,
                 contentType: false,
                 processData: false,
                 timeout: 60000
             });
+            
+            if(resdata.responseJSON['result'] == '0'){
+                $.each(resdata.responseJSON['errors'], function(){
+                   ds.showNotification("danger",this); 
+                });
+            }else{
+                $('tr#' + resdata.responseJSON['id'] + ' .img-container').html('<img src="/img/' + resdata.responseJSON['img'] + '" alt="' + resdata.responseJSON['id'] + '" />');
+            }
         };
         
         Upload.prototype.progressHandling = function (event) {
@@ -152,13 +163,14 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         
         var file = e.target.files[0];
         var id = $(e.target.parentElement.parentElement.parentElement).attr('id');
-        var upload = new Upload(file, "materials", id);
+        var upload = new Upload(file, target, id);
         upload.doUpload();
     }
     
     ngAfterViewInit(): void {
         var product_name = this.route.snapshot.params['name'];
         var ds = this.ds;
+        var rtr = this.router;
         
         this.ds.getProductMaterials(this.route.snapshot.params['name']).subscribe(res => { 
             this.materials = res;
@@ -251,6 +263,10 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
             language: 'sk'
         });
         
+        if($(".selectpicker").length != 0){
+            $(".selectpicker").selectpicker();
+        }
+        
         this.ds.getProduct(this.route.snapshot.params['name']).subscribe(res => { 
             $('#product_name').val(res['name']);
             $('#product_name').parent().removeClass('is-empty');
@@ -281,6 +297,22 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
     		$('textarea#short_information').froalaEditor('html.set', res['short_information']);
             $('textarea#long_information').froalaEditor('html.set', res['long_information']);
             $('textarea#description').froalaEditor('html.set', res['description']);
+            
+            $('#product-size-default-width').val(res['default_width']);
+            $('#product-size-default-height').val(res['default_height']);
+            $('#product-size-min').val(res['min_size']);
+            $('#product-size-max').val(res['max_size']);
+            $('#product-size-step').val(res['step']);
+            
+            $('#product-size-default-width').parent().removeClass('is-empty');
+            $('#product-size-default-height').parent().removeClass('is-empty');
+            $('#product-size-min').parent().removeClass('is-empty');
+            $('#product-size-max').parent().removeClass('is-empty');
+            $('#product-size-step').parent().removeClass('is-empty');
+            
+            $('#size-unit').val(res['size_unit']);
+            $('#size-decimal').val(res['size_decimal']);
+            $('.selectpicker').selectpicker('refresh')
         });
         
         $.getScript('/admin/assets/js/plugins/jquery.tagsinput.js');
@@ -288,15 +320,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         $("#product-image").on("change", function (e) {
             var file = $(this)[0].files[0];
             var upload = new Upload(file, "products");
-            result = upload.doUpload();
-            
-            if(result.responseJSON['result'] == '0'){
-                        $.each(result.responseJSON['errors'], function(key, value) {
-                			this.ds.showNotification("error",value);
-                		});
-                    }else{
-                        this.ds.showNotification("success","Obrázok bol úspešne zmenený!");
-                    }
+            upload.doUpload();
         });
         
         $('input[type=radio][name=calculationFinalisationType]').change(function() {
@@ -304,16 +328,10 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         
             data['target'] = 'finalisation_tableprice';
             data['value'] = '0';
-            data['product_name'] = product_name;
-            
-            if($(this).attr('id') == 'finalisationTypeTable'){
+            if($('#finalisationTypeTable').prop('checked')){
                 data['value'] = '1';
-                $('.finalisation-percentage-column').hide();
-                $('.finalisation-table-button').show();
-            }else{
-                $('.finalisation-percentage-column').show();
-                $('.finalisation-table-button').hide();
             }
+            data['product_name'] = product_name;
             
             $.ajax({
                 type: "POST",
@@ -322,6 +340,9 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         		async: false,
         		success: function(data){}
             });
+            
+            rtr.navigateByUrl('/products/list', {skipLocationChange: true}).then(()=>
+                rtr.navigate(["/products/edit/" + product_name]));
         });
         
         $('input[type=checkbox][name=multiselect]').change(function() {
@@ -344,26 +365,6 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         		}
             });
         });
-    }
-    
-    changeFinalisationCalculationType(value: string){
-        var data = {};
-        
-            data['target'] = 'finalisation_tableprice';
-            data['value'] = value;
-            data['product_name'] = this.route.snapshot.params['name'];
-            
-            $.ajax({
-                type: "POST",
-        		url: "/admin/api/product_service.php",
-        		data: data,
-        		async: false,
-        		success: function(data){
-        		    
-        		}
-            });
-            
-            this.router.navigate(['/products/list']);
     }
     
     createTablePriceEntry(target: string){
@@ -483,7 +484,15 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         		url: "/admin/api/product_service.php",
         		data: finalisationdata,
         		success: function(data){
-        		    $('#finalisations-table tbody').append('<tr id="finalisation-' + data + '"><td class="img-container"><img alt="' + finalisationdata['name'] + '" src="/img/finalisations/default.jpg"></td><td>' + finalisationdata['name'] + '</td><td class="finalisation-percentage-column"><small>+</small><small>%</small></td><td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">add_a_photo</i></button><button type="button" rel="tooltip" class="btn btn-info" (click)="selectFinalisation(' + data + ')"><i class="material-icons">keyboard_arrow_down</i></button><button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFinalisation(' + data + ')"><i class="material-icons">close</i></button></td></tr>'
+        		    $('#finalisations-table tbody').append('<tr id="finalisation-' + data + '"><td class="img-container"><img alt="' + finalisationdata['name'] + '" src="/img/finalisations/default.jpg"></td><td>' + finalisationdata['name'] + '</td><input class="form-control text-center" type="number" value="0"/></td><td class="td-actions text-right"><button type="button" rel="tooltip" class="btn btn-success"><i class="material-icons">add_a_photo</i></button><button type="button" rel="tooltip" class="btn btn-info" (click)="selectFinalisation(' + data + ')"><i class="material-icons">keyboard_arrow_down</i></button><button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFinalisation(' + data + ')"><i class="material-icons">close</i></button></td></tr>');
+        		    
+        		    if($("#finalisationTypeTable").prop("checked")){
+                        $('.finalisation-percentage-column').hide();
+                        $('.finalisation-table-button').show();
+                    }else{
+                        $('.finalisation-percentage-column').show();
+                        $('.finalisation-table-button').hide();
+                    }
         		}
             });
             
@@ -516,12 +525,29 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
     
     onSubmitForm() {
         var formdata = {};
+        var finalisationData = {};
         
         formdata['short_information'] = $('textarea#short_information').froalaEditor('html.get');
         formdata['long_information'] = $('textarea#long_information').froalaEditor('html.get');
         formdata['description'] = $('textarea#description').froalaEditor('html.get');
         formdata['color'] = $('#color').val().substring(1);
         formdata['product_name'] = this.route.snapshot.params['name'];
+        
+        formdata['size_unit'] = $('#size-unit').val();
+        formdata['size_decimal'] = $('#size-decimal').val();
+        formdata['default_width'] = $('#product-size-default-width').val();
+        formdata['default_height'] = $('#product-size-default-height').val();
+        formdata['min_size'] = $('#product-size-min').val();
+        formdata['max_size'] = $('#product-size-max').val();
+        formdata['step'] = $('#product-size-step').val();
+        
+        if($('#finalisationTypePercentage').prop('checked')){
+            $('#finalisations-table tbody tr').each(function(){
+                finalisationData[$(this).attr('id').split("-")[1]] = $(this).find('.finalisation-percentage-column input').val();
+            })
+            
+            formdata['finalisations'] = finalisationData;
+        }
         
         $.ajax({
           url: "/admin/api/product_service.php",

@@ -161,18 +161,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        $response = uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
+        $response = uploadImage($_FILES["file"], $img_folder_path.$_POST['target']."/");
         if($response['result'] == '1'){
             if(isset( $_POST['target']) && !empty( $_POST['target'])){
+                $filename = preg_replace('/\s+/', '_', basename($_FILES["file"]["name"]));
                 if($_POST['target'] == 'materials'){
-                    $db->query("UPDATE product_materials SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'");
+                    $db->query("UPDATE product_materials SET img = '".$_POST['target']."/".$filename."' WHERE id = '".explode("-",$_POST['id'])[1]."'");
   
                     $response['id'] = $_POST['id'];
-                    $response['img'] = $_POST['target']."/".basename($_FILES["file"]["name"]);
+                    $response['img'] = $_POST['target']."/".$filename;
+                }else if($_POST['target'] == 'finalisations'){
+                    $db->query("UPDATE product_finalisations SET img = '".$_POST['target']."/".$filename."' WHERE id = '".explode("-",$_POST['id'])[1]."'");
+  
+                    $response['id'] = $_POST['id'];
+                    $response['img'] = $_POST['target']."/".$filename;
+                }else if($_POST['target'] == 'products'){
+                     $db->query("UPDATE product SET img = '".$_POST['target']."/".$filename."' WHERE name = '".$_POST['product_name']."'");
                 }
-            }else{
-                $db->query("UPDATE product SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE name = '".$_POST['product_name']."'");
-                echo "UPDATE product SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE name = '".$_POST['product_name']."'";
             }
         }
         
@@ -201,7 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             
             echo json_encode($db->insert_id);
         }else{
-            $state = $db->query("UPDATE product SET description = '".htmlspecialchars($_POST['description'])."', short_information = '".htmlspecialchars($_POST['short_information'])."', long_information = '".htmlspecialchars($_POST['long_information'])."', color = '".$_POST['color']."' WHERE name = '".$_POST['product_name']."'");
+            $state = $db->query("UPDATE product SET description = '".htmlspecialchars($_POST['description'])."', short_information = '".htmlspecialchars($_POST['short_information'])."', long_information = '".htmlspecialchars($_POST['long_information'])."', size_unit = '".$_POST['size_unit']."', size_decimal = '".$_POST['size_decimal']."', default_width = '".$_POST['default_width']."', default_height = '".$_POST['default_height']."', min_size = '".$_POST['min_size']."', max_size = '".$_POST['max_size']."', step = '".$_POST['step']."' WHERE name = '".$_POST['product_name']."'");
+            if (isset( $_POST['finalisations'] ) && !empty( $_POST['finalisations'])){
+                foreach($_POST['finalisations'] as $id => $value){
+                    $state = $db->query("UPDATE product_finalisations SET percentage = '".$value."' WHERE id = '".$id."'");
+                }
+            }
             echo json_encode($state);
         }
     }

@@ -2,7 +2,7 @@
 	require_once("db.php");
 	header('Content-Type: application/json; charset=utf-8');
 
-	$product_name = $_POST['name'];
+	$product_name = $_GET['name'];
 
 	$sql = "SELECT * FROM product WHERE UPPER(name) = UPPER('".$product_name."')";
 	$result = $db->query($sql);
@@ -25,7 +25,8 @@
 	    	$resultprices = $db->query($sql);
 			if ($resultprices->num_rows > 0) {
 	    		while($rowprice = $resultprices->fetch_assoc()) {
-	    			$prices[floatval($rowprice['size'])] = floatval($rowprice['price']);
+	    			$key = number_format(floatval($rowprice['size']), 2, '.', '');
+	    			$prices[$key] = floatval($rowprice['price']);
 	    		}
 	    	}
 

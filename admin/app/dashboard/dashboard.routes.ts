@@ -1,7 +1,6 @@
 import { Route, RouterModule } from '@angular/router';
 // import { DashboardComponent } from './dashboard.component';
 import { HomeComponent } from './home/home.component';
-import { PasswordChangeComponent } from './users/passwordchange/passwordchange.component';
 
 import { ProductsListComponent } from './products/productslist/productslist.component';
 import { ProductsEditComponent } from './products/productsedit/productsedit.component';
@@ -24,12 +23,13 @@ import { ShippingsEditComponent } from './shippings/shippingsedit/shippingsedit.
 import { ShippingsNewComponent } from './shippings/shippingsnew/shippingsnew.component';
 
 import { UsersListComponent } from './users/userslist/userslist.component';
+import { PasswordChangeComponent } from './users/passwordchange/passwordchange.component';
+
+import { FilesListComponent } from './files/fileslist/fileslist.component';
 //
 export const MODULE_ROUTES: Route[] =[
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: HomeComponent },
-    
-    { path: 'user/passwordchange', component: PasswordChangeComponent },
 
     { path: 'products/list', component: ProductsListComponent },
     { path: 'products/edit/:name', component: ProductsEditComponent },
@@ -52,12 +52,13 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'shippings/new', component: ShippingsNewComponent },
 
     { path: 'users/list', component: UsersListComponent },
+    { path: 'users/passwordchange', component: PasswordChangeComponent },
+    
+    { path: 'files/list/:category', component: FilesListComponent },
 ]
 //
 export const MODULE_COMPONENTS = [
     HomeComponent,
-
-    PasswordChangeComponent,
 
     ProductsListComponent,
     ProductsEditComponent,
@@ -80,4 +81,7 @@ export const MODULE_COMPONENTS = [
     ShippingsNewComponent,
     
     UsersListComponent,
+    PasswordChangeComponent,
+    
+    FilesListComponent,
 ]

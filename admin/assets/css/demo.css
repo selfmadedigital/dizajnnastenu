@@ -104,3 +104,7 @@ table td .dropdown-menu, table td .dropdown-menu-left{
 .checkbox, .radio{
     margin-top: 0;
 }
+
+#multiple-filters .bootstrap-select {
+    margin: 0;
+}

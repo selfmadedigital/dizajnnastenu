@@ -43,6 +43,91 @@
                     
                     <div class="card">
                         <div class="card-header card-header-icon" data-background-color="rose">
+                            <i class="material-icons">apps</i>
+                        </div>
+                        <div class="card-content">
+                            <h4 class="card-title">Pravidlá produktu</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Jednotky rozmerov
+                                        </label>
+                                        <select id="size-unit" class="selectpicker" data-style="btn btn-rose btn-round" title="select" data-size="7">
+                                            <option value="m">m x m</option>
+                                            <option value="cm" selected>cm x cm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Počet desatinných miest
+                                        </label>
+                                        <select id="size-decimal" class="selectpicker" data-style="btn btn-rose btn-round" title="select" data-size="7">
+                                            <option value="0">0</option>
+                                            <option value="1" selected>1</option>
+                                            <option value="2">2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Predvolená šírka
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input class="form-control" id="product-size-default-width" type="number" required="true" ng-model="val | number: 2'" step="0.01" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Predvolená výška
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input class="form-control" id="product-size-default-height" type="number" name ="product-size-default-height" required="true" ng-model="product-size-default-width | number : 2" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Minimálna veľkosť pre kalkuláciu
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input class="form-control" id="product-size-min" type="number" required="true" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Maximálna veľkosť pre kalkuláciu
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input class="form-control" id="product-size-max" type="number" required="true" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group label-floating">
+                                        <label class="control-label">
+                                            Krok veľkosti pre zaokrúhlenie
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input class="form-control" id="product-size-step" type="number" required="true" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header card-header-icon" data-background-color="rose">
                             <i class="material-icons">image</i>
                         </div>
                         <div class="card-content">
@@ -90,7 +175,7 @@
                                             <td class="td-actions text-right">
                                                 <label class="btn btn-success">
                                                     <i class="material-icons">add_a_photo</i>
-                                                    <input type="file" class="material-image" data-id="{{material.id}}" name="filter-image" style="display: none;" (change)="imageUploaded($event)">
+                                                    <input type="file" class="material-image" data-id="{{material.id}}" name="filter-image" style="display: none;" (change)="imageUploaded($event, 'materials')">
                                                 </label>
                                                 <button type="button" rel="tooltip" class="btn btn-info" (click)="selectMaterial(material.id)">
                                                     <i class="material-icons">keyboard_arrow_down</i>
@@ -332,17 +417,16 @@
                             <div class="row">
                                 <label class="col-sm-2 label-on-left">Spôsob kalkulácie</label>
                                 <div class="col-sm-4">
-                                <!--    <div class="radio">-->
-                                <!--        <label>-->
-                                <!--            <input type="radio" name="calculationFinalisationType" checked="true" id="finalisationTypeTable"> Fixne-->
-                                <!--        </label>-->
-                                <!--    </div>-->
-                                <!--    <div class="radio">-->
-                                <!--        <label>-->
-                                <!--            <input type="radio" name="calculationFinalisationType" id="finalisationTypePercentage"> Percentuálne-->
-                                <!--        </label>-->
-                                <!--    </div>-->
-                                <button type="button" rel="tooltip" class="btn btn-info" (click)="changeFinalisationCalculationType('1')">PREPNÚŤ</button>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="calculationFinalisationType" checked="true" id="finalisationTypeTable"> Fixne
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            <input type="radio" name="calculationFinalisationType" id="finalisationTypePercentage"> Percentuálne
+                                        </label>
+                                    </div>
                                 </div>
                                 
                                 <label class="col-sm-2 label-on-left">Typ finalizácie</label>
@@ -374,7 +458,7 @@
                                             <td class="td-actions text-right">
                                                 <label class="btn btn-success">
                                                     <i class="material-icons">add_a_photo</i>
-                                                    <input type="file" class="finalisation-image" data-id="{{finalisation.id}}" style="display: none;" (change)="imageUploaded($event)">
+                                                    <input type="file" class="finalisation-image" data-id="{{finalisation.id}}" style="display: none;" (change)="imageUploaded($event, 'finalisations')">
                                                 </label>
                                                 <button type="button" rel="tooltip" class="btn btn-info finalisation-table-button" (click)="selectFinalisation(finalisation.id)">
                                                     <i class="material-icons">keyboard_arrow_down</i>

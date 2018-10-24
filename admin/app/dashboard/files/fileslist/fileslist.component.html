@@ -1,0 +1,47 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">format_indent_increase</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Súbory</h4>
+                        <div class="table-responsive">
+                            <table class="table" id="table-files">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Náhľad</th>
+                                        <th>Názov</th>
+                                        <th class="text-right">Akcie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let file of files" id="{{file.id}}">
+                                        <td>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" class="selector"></label>
+                                            </div>
+                                        </td>
+                                        <td class="img-container">
+                                            <img src="/img/{{file.category}}/{{file.name}}" alt="{{file.name}}">
+                                        </td>
+                                        <td class="image-name">{{file.name}}</td>
+                                        <td class="td-actions text-right">
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeFile(file.id,file.name,file.category)"><i class="material-icons">close</i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer text-right">
+                       <button class="btn btn-rose btn-fill" (click)="removeFiles()">Odstrániť</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

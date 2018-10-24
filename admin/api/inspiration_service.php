@@ -40,41 +40,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        $response = uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
-        if(!empty($_POST['id']) && $response['result'] == '1'){
-            if(!$db->query("UPDATE inspiration SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'")){
+        $target = $_POST['target'];
+        if($_POST['target'] == "inspirations-multiupload"){
+            $target = "inspirations";
+        }
+        $response = uploadImage($_FILES["file"], $img_folder_path.$target."/");
+        if(isset($_POST['id']) && !empty($_POST['id']) && $response['result'] == '1'){
+            $filename = preg_replace('/\s+/', '_', basename($_FILES["file"]["name"]));
+            if(!$db->query("UPDATE inspiration SET img = '".$target."/".$filename."' WHERE id = '".$_POST['id']."'")){
                 $response['result'] = '0';
                 $errors = $response['errors'];
                 array_push($errors, "Problém pri ukladaní do databázy!");
                 $response['errors'] = $errors;
             }
         }
+        if($_POST['target'] == "inspirations-multiupload" && $response['result'] == '1'){
+            $filename = preg_replace('/\s+/', '_', basename($_FILES["file"]["name"]));
+            if(!$db->query("INSERT INTO inspiration(name, img) VALUES ('".pathinfo($filename)['filename']."','".$target."/".$filename."')")){
+                $response['result'] = '0';
+                $errors = $response['errors'];
+                array_push($errors, "Problém pri ukladaní do databázy!");
+                $response['errors'] = $errors;
+            }else{
+                $response['insertid'] = $db->insert_id;
+                $response['name'] = $filename;
+            }
+        }
         echo json_encode($response);
     }else{
-        if(isset($_POST['id']) && !empty($_POST['id'])){
-            $db->query("DELETE FROM inspiration_to_attribute WHERE inspiration_id = '".$_POST['id']."'");
-            $db->query("UPDATE inspiration SET name = '".$_POST['name']."' WHERE id = '" + $_POST['id'] + "'");
-            $inspiration_id = $_POST['id'];
-        }else{
-            $db->query("INSERT INTO inspiration(name, img) VALUES ('".$_POST['name']."','".$_POST['img']."')");
-            $inspiration_id = $db->insert_id;
-        }
-        
-        $filters = ['category','room','color','design'];
-        $ok = [];
-        foreach($filters as $filter_attribute){
-            if(strlen($_POST['filters-'.$filter_attribute]) > 0){
-                foreach(explode(",",$_POST['filters-'.$filter_attribute]) as $filter){
-                    $result_filter = $db->query("SELECT id FROM filter_attribute WHERE name = '".$filter."' AND attribute = '".$filter_attribute."'");
-                    if(mysqli_num_rows($result_filter) > 0){
-                        $row = $result_filter->fetch_assoc();
-                        $id =  $row['id'];
-                    }else{
-                        $db->query("INSERT INTO filter_attribute(name, img, attribute) VALUES ('".$filter."','filters/default.jpg','".$filter_attribute."')");
-                        $id = $db->insert_id;
+        if(isset($_POST['target']) && !empty($_POST['target'])){
+            $filters = ['category','room','color','design'];
+            foreach($filters as $filter_attribute){
+                if(strlen($_POST['filters-'.$filter_attribute]) > 0){
+                    $db->query("DELETE FROM inspiration_to_attribute WHERE filter_id IN (SELECT id FROM filter_attribute WHERE attribute='".$filter_attribute."') AND inspiration_id = '".$_POST['id']."';");
+                    foreach(explode(",",$_POST['filters-'.$filter_attribute]) as $filter){
+                        $result_filter = $db->query("SELECT id FROM filter_attribute WHERE name = '".$filter."' AND attribute = '".$filter_attribute."'");
+                        if(mysqli_num_rows($result_filter) > 0){
+                            $row = $result_filter->fetch_assoc();
+                            $id =  $row['id'];
+                        }else{
+                            $db->query("INSERT INTO filter_attribute(name, img, attribute) VALUES ('".$filter."','filters/default.jpg','".$filter_attribute."')");
+                            $id = $db->insert_id;
+                        }
+                            
+                        $db->query("INSERT INTO inspiration_to_attribute(inspiration_id, filter_id) VALUES ('".$_POST['id']."','".$id."')");
                     }
-                        
-                    $db->query("INSERT INTO inspiration_to_attribute(inspiration_id, filter_id) VALUES ('".$inspiration_id."','".$id."')");
+                }
+            }
+        }else{
+            if(isset($_POST['id']) && !empty($_POST['id'])){
+                $db->query("DELETE FROM inspiration_to_attribute WHERE inspiration_id = '".$_POST['id']."'");
+                $db->query("UPDATE inspiration SET name = '".$_POST['name']."' WHERE id = '" + $_POST['id'] + "'");
+                $inspiration_id = $_POST['id'];
+            }else{
+                $db->query("INSERT INTO inspiration(name, img) VALUES ('".$_POST['name']."','".$_POST['img']."')");
+                $inspiration_id = $db->insert_id;
+            }
+            
+            $filters = ['category','room','color','design'];
+            $ok = [];
+            foreach($filters as $filter_attribute){
+                if(strlen($_POST['filters-'.$filter_attribute]) > 0){
+                    foreach(explode(",",$_POST['filters-'.$filter_attribute]) as $filter){
+                        $result_filter = $db->query("SELECT id FROM filter_attribute WHERE name = '".$filter."' AND attribute = '".$filter_attribute."'");
+                        if(mysqli_num_rows($result_filter) > 0){
+                            $row = $result_filter->fetch_assoc();
+                            $id =  $row['id'];
+                        }else{
+                            $db->query("INSERT INTO filter_attribute(name, img, attribute) VALUES ('".$filter."','filters/default.jpg','".$filter_attribute."')");
+                            $id = $db->insert_id;
+                        }
+                            
+                        $db->query("INSERT INTO inspiration_to_attribute(inspiration_id, filter_id) VALUES ('".$inspiration_id."','".$id."')");
+                    }
                 }
             }
         }

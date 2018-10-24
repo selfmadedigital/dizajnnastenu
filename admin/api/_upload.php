@@ -1,6 +1,9 @@
 <?php
+
+$img_folder_path = "/home/ubuntu/workspace/img/";
+
 function uploadImage($image, $target_dir){
-    $target_file = $target_dir . basename($image["name"]);
+    $target_file = $target_dir . preg_replace('/\s+/', '_', basename($image["name"]));
     $errors = array();
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
     $check = getimagesize($image["tmp_name"]);

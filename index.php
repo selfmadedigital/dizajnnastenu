@@ -18,10 +18,11 @@
   	<div id="popup" style="display: none;">
   		<div id="popup-overlay"></div>
   		<div id="popup-container"></div>
+  		<button id="popup-close" class="icon-cross" onClick="closePopup();"></button>
   	</div>
 
     <div class="vertical-center">
-    	<div class="container">
+    	<div class="container" id="main-container">
 		    <div class="row subpage" style="display:none;" id="domov">
 		    	<div class="col-md-4 col-sm-4 col-xs-12 box box-logo" id="mobile-logo">
 		        <a href="" class="box-content box-content-logo"></a>
@@ -60,10 +61,10 @@
 			      	</div>
 			    </div>
 		      	<div class="row">
-			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
+			      	<div class="col-xs-6 col-md-6 col-sm-6 box box-custom-color menu-box color-darker" onClick="changePage('domov','');">
 			      		<button class="btn-menu icon-arrow"></button>
 			      	</div>
-			      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+			      	<div class="col-xs-6 col-md-6 col-sm-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
 			      		<button class="btn-menu icon-menu"></button>
 			      	</div>
 			     </div>
@@ -90,11 +91,11 @@
 		      		<div class="col-md-12 col-sm-12 col-xs-12 box box-color-11">
 			        	<div class="box-content" id="product-operands">
 			        		<form>
-						    <div class="form-group row">
-						      	<label class="col-sm-6 control-label">ROZMER:</label>
+						    <div class="form-group row" id="product-size-group">
+						      	<label class="col-sm-6 control-label">ROZMER:<small></small></label>
 						      	<div class="col-sm-6">
-	                    			<input type="text" class="form-control input-number" value="1" min="1" step="1" id="input-width">
-	                    			<input type="text" class="form-control input-number" value="1" min="1" step="1" id="input-height">
+	                    			<input type="text" class="form-control input-number" value="1" min="0.01" step="0.01" data-decimals="2" id="input-width">
+	                    			<input type="text" class="form-control input-number" value="1" min="0.01" step="0.01" data-decimals="2" id="input-height">
 	                  			</div>
 						    </div>
 						    <div class="form-group row">
@@ -129,12 +130,12 @@
 			      		<div class="box-content">
 				      		<div class="row">
 				      			<div class="col-sm-5" id="product-material-group">
-				      				<span>MATERIÁL:</span>
+				      				<span><b>MATERIÁL:</b></span>
 				      				<span id="product-material-value"></span><input type="hidden" id="material-price" />
 				      				<button class="btn-change" onClick="openMaterialSelection();"><span class="icon-refresh"></span>Zmeniť</button>
 				      			</div>
 				      			<div class="col-sm-7">
-				      				<div class="material-preview" id="selected-material"></div>
+				      				<div class="material-preview href-box" id="selected-material" onClick="openMaterialSelection();"></div>
 				      			</div>
 				      		</div>
 				      		<label class="btn-color btn-file btn-bottom text-center" id="import-button">
@@ -149,7 +150,7 @@
 		      <div class="col-md-4 col-sm-4 col-xs-12 box-container">
 		      		<div class="col-md-12 col-sm-12 col-xs-12 box box-color-9">
 			      		<div class="box-content">
-			        		<canvas id="product-chart" width="300" height="300"></canvas>
+			        		<div id="produkt-inspiration-image" class="box-image href-box"></div>
 			        	</div>
 			      </div>
 
@@ -213,7 +214,7 @@
 		    </div>
 
 		    <div class="row subpage" style="display:none;" id="inspiracia">
-		    	<div class="col-md-4 col-sm-4 col-xs-12">
+		    	<div class="col-md-4 col-sm-4 col-xs-12 controls-container" id="inspiration-controls">
 		    		<div class="row">
 				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
 				      		<div class="box-content box-content-center text-center"><h1>Inšpirácia</h1></div>
@@ -234,23 +235,23 @@
 					        		<div class="col-sm-6 filter filter-category">
 					        			PRODUKT<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('category');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
-					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter filter-room">
-					        			MIESTNOSŤ<small></small>
-					        		</div>
-					        		<div class="col-sm-6">
-					        			<button class="btn-change" onClick="openFilterSelection('room');"><span class="icon-refresh"></span>Zmeniť</button>
-					        		</div>
-					        	</div>
+					        	<!--<div class="row filter-change">-->
+					        	<!--	<div class="col-sm-6 filter filter-room">-->
+					        	<!--		MIESTNOSŤ<small></small>-->
+					        	<!--	</div>-->
+					        	<!--	<div class="col-sm-6 filter-button">-->
+					        	<!--		<button class="btn-change" onClick="openFilterSelection('room');"><span class="icon-refresh"></span>Zmeniť</button>-->
+					        	<!--	</div>-->
+					        	<!--</div>-->
 					        	<div class="row filter-change">
 					        		<div class="col-sm-6 filter filter-color">
 					        			FARBA<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('color');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
@@ -258,12 +259,12 @@
 					        		<div class="col-sm-6 filter filter-design">
 					        			DIZAJN<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('design');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 offset-sm-6">
+					        		<div class="col-sm-6 offset-6 filter-button">
 					        			<button class="btn-change" onClick="resetFilterSelection();"><span class="icon-refresh"></span>Reset</button>
 					        		</div>
 					        	</div>
@@ -280,7 +281,7 @@
 				
 									if ($result->num_rows > 0) {
 					    				while($row = $result->fetch_assoc()) {
-					    					echo '<span>' . $row['text'] . '</span>';
+					    					echo '<div>' . $row['text'] . '<span>&#8221;</span></div>';
 					    				}
 					    			}
 						      ?>
@@ -288,7 +289,7 @@
 					      </div>
 				  	  </div>
 		    	</div>
-		    	<div class="col-md-8 col-sm-8 col-xs-12">
+		    	<div class="col-md-8 col-sm-8 col-xs-12 container-background">
 		    		<div class="row" id="inspiration-container"></div>
 		    		<button class="scroll-arrow icon-arrow" onClick="scrollContainer('inspiration');"></button>
 		    		<button class="fullscreen-arrows icon-fullscreen" onClick="openInspirationsPopup();"></button>
@@ -296,7 +297,7 @@
 		     </div>
 
 		     <div class="row subpage" style="display:none;" id="blog">
-		    	<div class="col-md-4 col-sm-4 col-xs-12">
+		    	<div class="col-md-4 col-sm-4 col-xs-12 controls-container" id="blog-controls">
 		    		<div class="row">
 				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
 				      		<div class="box-content box-content-center text-center"><h1>Blog</h1></div>
@@ -314,39 +315,39 @@
 						 <div class="col-md-12 box box-color-10">
 					        <div class="box-content filter-container">
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter-category">
+					        		<div class="col-sm-6 filter filter-category">
 					        			PRODUKT<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('category');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
+					        	<!--<div class="row filter-change">-->
+					        	<!--	<div class="col-sm-6 filter filter-room">-->
+					        	<!--		MIESTNOSŤ<small></small>-->
+					        	<!--	</div>-->
+					        	<!--	<div class="col-sm-6 filter-button">-->
+					        	<!--		<button class="btn-change" onClick="openFilterSelection('room');"><span class="icon-refresh"></span>Zmeniť</button>-->
+					        	<!--	</div>-->
+					        	<!--</div>-->
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter-room">
-					        			MIESTNOSŤ<small></small>
-					        		</div>
-					        		<div class="col-sm-6">
-					        			<button class="btn-change" onClick="openFilterSelection('room');"><span class="icon-refresh"></span>Zmeniť</button>
-					        		</div>
-					        	</div>
-					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter-color">
+					        		<div class="col-sm-6 filter filter-color">
 					        			FARBA<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('color');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 filter-design">
+					        		<div class="col-sm-6 filter filter-design">
 					        			DIZAJN<small></small>
 					        		</div>
-					        		<div class="col-sm-6">
+					        		<div class="col-sm-6 filter-button">
 					        			<button class="btn-change" onClick="openFilterSelection('design');"><span class="icon-refresh"></span>Zmeniť</button>
 					        		</div>
 					        	</div>
 					        	<div class="row filter-change">
-					        		<div class="col-sm-6 offset-sm-6">
+					        		<div class="col-sm-6 offset-6 filter-button">
 					        			<button class="btn-change" onClick="resetFilterSelection();"><span class="icon-refresh"></span>Reset</button>
 					        		</div>
 					        	</div>
@@ -363,7 +364,7 @@
 				
 									if ($result->num_rows > 0) {
 					    				while($row = $result->fetch_assoc()) {
-					    					echo '<span>' . $row['text'] . '</span>';
+					    					echo '<div>' . $row['text'] . '<span>&#8221;</span></div>';
 					    				}
 					    			}
 						      ?>
@@ -371,15 +372,27 @@
 					      </div>
 				  	  </div>
 		    	</div>
-		    	<div class="col-md-8 col-sm-8 col-xs-12">
+		    	<div class="col-md-8 col-sm-8 col-xs-12 container-background">
 		    		<div class="row" id="blog-container"></div>
 		    		<button class="scroll-arrow icon-arrow" onClick="scrollContainer('blog');"></button>
 		    	</div>
 		     </div>
 
 		     <div class="row subpage" style="display:none;" id="blog-clanok">
-			    <div class="col-md-4 col-sm-4 col-xs-12 box box box-color-7">
-				    <a href="" class="box-content box-content-center text-center homepage"><h1 id="blog-name"></h1></a>
+			    <div class="col-md-4 col-sm-4 col-xs-12 controls-container">
+		    		<div class="row">
+				      	<div class="col-md-12 col-sm-12 col-xs-12 box box-custom-color color-half box-menu">
+				      		<div class="box-content box-content-center text-center"><h1 id="blog-name"></h1></div>
+				      	</div>
+				    </div>
+			      	<div class="row">
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-darker" onClick="changePage('blog','');">
+				      		<button class="btn-menu icon-arrow"></button>
+				      	</div>
+				      	<div class="col-md-6 col-sm-6 col-xs-6 box box-custom-color menu-box color-dark" onClick="openPopupMenu();">
+				      		<button class="btn-menu icon-menu"></button>
+				      	</div>
+				     </div>
 				</div>
 				<div class="col-md-8 col-sm-8 col-xs-12 box box-color-half-9-10 box-image" id="blog-image">
 				    <div class="box-content text-center"></div>
@@ -428,7 +441,11 @@
 			    </div>
 		      </div>
 		      <div class="col-md-8 col-sm-8 col-xs-12 box box-color-half-11-9">
-		        <div id="googleMap" style="width:100%;height:80%;top:30px"></div>
+		        <div id="cd-google-map">
+				   <div id="google-container"></div>
+				   <div id="cd-zoom-in"></div>
+				   <div id="cd-zoom-out"></div>
+				</div>
 		      </div>
 		      <div class="col-md-4 col-sm-4 col-xs-12 box box-color-11">
 		        
@@ -460,9 +477,19 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/inputspinner.js"></script>
     <script src="/js/simpleupload.min.js"></script>
+    <script src="/js/underscore.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1fYBQxh3RG2F7Vy93aqMMgIDxIGLfF6U"></script>
 	<script src="/js/script.js?v=<?=time();?>"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1fYBQxh3RG2F7Vy93aqMMgIDxIGLfF6U&callback=customMap"></script>
+		
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-126406792-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
 	
+	  gtag('config', 'UA-126406792-1');
+	</script>
+
   </body>
 </html>

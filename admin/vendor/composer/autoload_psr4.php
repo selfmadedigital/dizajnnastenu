@@ -6,8 +6,12 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Component\\Translation\\' => array($vendorDir . '/symfony/translation'),
+    'Spatie\\Analytics\\' => array($vendorDir . '/spatie/analytics-statistics/src'),
     'SimpleCrud\\' => array($vendorDir . '/simple-crud/simple-crud/src'),
     'Delight\\Http\\' => array($vendorDir . '/delight-im/http/src'),
     'Delight\\Cookie\\' => array($vendorDir . '/delight-im/cookie/src'),
     'Delight\\Auth\\' => array($vendorDir . '/delight-im/auth/src'),
+    '' => array($vendorDir . '/nesbot/carbon/src'),
 );

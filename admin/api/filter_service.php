@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode($filters);
 }else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_FILES)){
-        uploadImage($_FILES["file"], "/home/ubuntu/workspace/img/".$_POST['target']."/");
-        $db->query("UPDATE filter_attribute SET img = '".$_POST['target']."/".basename($_FILES["file"]["name"])."' WHERE id = '".$_POST['id']."'");
+        uploadImage($_FILES["file"], $img_folder_path.$_POST['target']."/");
+        $db->query("UPDATE filter_attribute SET img = '".$_POST['target']."/".preg_replace('/\s+/', '_', basename($_FILES["file"]["name"]))."' WHERE id = '".$_POST['id']."'");
         
         class Response {}
         
