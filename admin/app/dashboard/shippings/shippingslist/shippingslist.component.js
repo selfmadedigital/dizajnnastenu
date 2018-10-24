@@ -36,7 +36,7 @@ var ShippingsListComponent = (function () {
             confirmButtonText: 'Áno odstrániť!',
             cancelButtonText: 'Zrušiť'
         }).then(function (result) {
-            if (result.value) {
+            if (result) {
                 _this.ds.removeShipping(id);
                 _this.ds.showNotification("success", "Preprava <b>" + name + "</b> bola úspešne odstránená!");
                 $('tr#' + id).hide();

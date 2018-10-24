@@ -19,7 +19,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let shipping of shippings">
+                                    <tr *ngFor="let shipping of shippings" id="{{shipping.id}}">
                                         <td class="img-container">
                                             <img src="/img/{{shipping.img}}" alt="{{shipping.name}}">
                                         </td>
