@@ -63,7 +63,7 @@
 				    	$result_finalisation_prices = $db->query($sql);
 						if ($result_finalisation_prices->num_rows > 0) {
 				    		while($price = $result_finalisation_prices->fetch_assoc()) {
-				    			$finalisation_prices[floatval($price['size'])] = floatval($price['price']);
+				    			$finalisation_prices[number_format(floatval($price['size']), 2, '.', '')] = floatval($price['price']);
 				    		}
 				    	}
 	    			}
@@ -80,7 +80,9 @@
 	    	$result_shipping = $db->query($sql);
 			if ($result_shipping->num_rows > 0) {
 	    		while($shipping = $result_shipping->fetch_assoc()) {
-	    			$shipping['price'] = floatval($shipping['price']);
+	    			if($shipping['price'] != NULL){
+	    				$shipping['price'] = floatval($shipping['price']);
+	    			}
 	    			array_push($shippings, $shipping);
 	    		}
 	    	}
@@ -91,7 +93,7 @@
 	    	$result_installation_prices = $db->query($sql);
 			if ($result_installation_prices->num_rows > 0) {
 	    		while($price = $result_installation_prices->fetch_assoc()) {
-	    			$installation_prices[floatval($price['size'])] = floatval($price['price']);
+	    			$installation_prices[number_format(floatval($price['size']), 2, '.', '')] = floatval($price['price']);
 	    		}
 	    	}
 

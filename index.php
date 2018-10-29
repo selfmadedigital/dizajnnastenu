@@ -178,15 +178,15 @@
 				      		</div>
 				      		<div class="row">
 				      			<div class="col-sm-6">
-				      				CENA / KS:
-				      			</div>
-				      			<div class="col-sm-6 text-right" id="product-price-piece"></div>
-				      		</div>
-				      		<div class="row">
-				      			<div class="col-sm-6">
 				      				INŠTALÁCIA:
 				      			</div>
 				      			<div class="col-sm-6 text-right" id="product-installation"></div>
+				      		</div>
+				      		<div class="row">
+				      			<div class="col-sm-6">
+				      				CENA / KS:
+				      			</div>
+				      			<div class="col-sm-6 text-right" id="product-price-piece"></div>
 				      		</div>
 				      		<div class="row">
 				      			<div class="col-sm-6">

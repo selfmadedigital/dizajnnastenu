@@ -579,10 +579,10 @@ var ProductsEditComponent = (function () {
             }
         });
     };
-    ProductsEditComponent.prototype.removeFinalisation = function (id, size) {
+    ProductsEditComponent.prototype.removeFinalisation = function (id, name) {
         var _this = this;
         swal({
-            title: 'Naozaj odstrániť hranicu ceny inštalácie pre ' + size + 'm<sup>2</sup> ?',
+            title: 'Naozaj odstrániť finalizáciu ' + name + ' ?',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#4caf50',
@@ -592,7 +592,7 @@ var ProductsEditComponent = (function () {
         }).then(function (result) {
             if (result) {
                 _this.ds.removeTarget(id, 'finalisation');
-                _this.ds.showNotification('success', 'Hranica ceny inštalácie pre <b>' + size + ' m<sup>2</sup></b> bola úspešne odstránená!');
+                _this.ds.showNotification('success', 'Finalizácia <b>' + name + '</b> bola úspešne odstránená!');
                 $('tr#finalisation-' + id).hide();
             }
         });

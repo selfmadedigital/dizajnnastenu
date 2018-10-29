@@ -357,12 +357,12 @@ input:focus {
 .filter-change small {
 	display: block;
 	margin-top: -2px;
-	margin-left: 5px;
+	margin-left: 3px;
 	color: #888;
 }
 
 .btn-change span {
-	padding: 5% 0;
+	padding: 4% 0;
 	font-size: 125%;
 	width: 30%;
 }
@@ -504,7 +504,7 @@ input[type="file"] {
 	content: " € / m\00b2";
 }
 
-#product-shipping:after {
+#product-shipping.numeric:after {
 	content: " €";
 }
 

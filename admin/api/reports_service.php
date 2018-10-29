@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
         $result = $db->query('SELECT * FROM '.$_GET['category']);
         while($row = $result->fetch_assoc()) {
-            if(!file_exists('/home/ubuntu/workspace/img/'.$row['img'])){
+            if(!file_exists($img_folder_path.$row['img'])){
                 $r = new Report();
                 $r->id = $row['id'];
                 $r->message = "Chýbajúci súbor ".$row['img'];

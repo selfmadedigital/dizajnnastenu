@@ -14,7 +14,7 @@
                                     <tr>
                                         <th>Náhľad</th>
                                         <th>Názov</th>
-                                        <th>Cena</th>
+                                        <th>Cena (&euro;)</th>
                                         <th class="text-right">Akcie</th>
                                     </tr>
                                 </thead>
@@ -25,7 +25,7 @@
                                         </td>
                                         <td>{{shipping.name}}</td>
                                         <td class="td-number">
-                                            {{shipping.price}}<small>&euro;</small>
+                                            {{shipping.price}}
                                         </td>
                                         <td class="td-actions text-right">
                                             <a [routerLink]="['/shippings/edit', shipping.id]">

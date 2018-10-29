@@ -45,10 +45,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($response);
     }else{
         if(isset($_POST['id']) && !empty($_POST['id'])){
-            $db->query("UPDATE shipping SET name = '".$_POST['name']."', price = '".$_POST['price']."' WHERE id = '".$_POST['id']."'");
+            $query = "UPDATE shipping SET name = '".$_POST['name']."'";
+            if(!empty($_POST['price'])){
+                $query .= ", price = '".$_POST['price']."'";
+            }
+            $query .= "WHERE id = '".$_POST['id']."'";
+            $db->query($query);
             $shipping_id = $_POST['id'];
         }else{
-            $db->query("INSERT INTO shipping(name, img, price) VALUES ('".$_POST['name']."','".$_POST['img']."','".$_POST['price']."')");
+            $query = "INSERT INTO shipping(name, img";
+            if(!empty($_POST['price'])){
+                $query .= ", price";
+            }
+            $query .= ") VALUES ('".$_POST['name']."','".$_POST['img']."'";
+            if(!empty($_POST['price'])){
+                $query .= ",'".$_POST['price']."'";
+            }
+            $query .= ")";
+            $db->query($query);
             $shipping_id = $db->insert_id;
         }
         

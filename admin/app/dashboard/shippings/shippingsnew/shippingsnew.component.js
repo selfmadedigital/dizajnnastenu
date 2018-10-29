@@ -85,12 +85,6 @@ var ShippingsNewComponent = (function () {
             $(progress_bar_id + " .progress-bar").css("width", +percent + "%");
             $(progress_bar_id + " .status").text(percent + "%");
         };
-        this.ds.getShipping(this.route.snapshot.params['id']).subscribe(function (res) {
-            $('#shipping_name').val(res['name']);
-            $('#shipping_name').parent().removeClass('is-empty');
-            $('#shipping_price').val(res['price']);
-            $('#shipping_price').parent().removeClass('is-empty');
-        });
         $("#shipping-image").on("change", function (e) {
             var file = $(this)[0].files[0];
             var upload = new Upload(file, "shipping");

@@ -216,7 +216,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         }
     }
 }else if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-    if($_GET['target'] == 'material'){
+    if($_GET['target'] == 'finalisation'){
+        $db->query("DELETE FROM finalisation_prices WHERE finalisation_id = '".$_GET['id']."'");
+        $db->query("DELETE FROM product_finalisations WHERE id = '".$_GET['id']."'");
+    }else if($_GET['target'] == 'material'){
         $db->query("DELETE FROM product_materials WHERE id = '".$_GET['id']."'");
         $db->query("DELETE FROM material_prices WHERE material_id = '".$_GET['id']."'");
     }else if($_GET['target'] == 'price'){

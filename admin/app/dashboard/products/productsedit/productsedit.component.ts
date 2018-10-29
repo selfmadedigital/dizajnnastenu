@@ -653,9 +653,9 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
         })
     }
     
-    removeFinalisation(id: string, size: string) {
+    removeFinalisation(id: string, name: string) {
         swal({
-          title: 'Naozaj odstrániť hranicu ceny inštalácie pre ' + size + 'm<sup>2</sup> ?',
+          title: 'Naozaj odstrániť finalizáciu ' + name + ' ?',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#4caf50',
@@ -665,7 +665,7 @@ export class ProductsEditComponent implements OnInit, AfterViewInit{
           }).then((result) => {
             if (result) {
                 this.ds.removeTarget(id, 'finalisation');
-                this.ds.showNotification('success','Hranica ceny inštalácie pre <b>' + size + ' m<sup>2</sup></b> bola úspešne odstránená!');
+                this.ds.showNotification('success','Finalizácia <b>' + name + '</b> bola úspešne odstránená!');
                 $('tr#finalisation-'+id).hide();
             }
         })

@@ -31,7 +31,7 @@ $(document).ready(function () {
 	})
 	
 	$("#popup-overlay").on("click", function (event) {
-		closePopup();
+		closePopup(1000);
 	})
 	
 	$('#inspiracia .box-custom-color').each(function (i) {
@@ -156,10 +156,10 @@ function changePage(page, nameid) {
 				$('#product-size').text(getSquareSize());
 
 				if (data['materials'] != null && Object.keys(data['materials']).length > 0) {
-					selectMaterial(getFirstKey(data['materials']));
+					selectMaterial(getFirstKey(data['materials']), null);
 				}
 				if(data['finalisations'] != null && Object.keys(data['finalisations']).length > 0){
-					selectFinalisation(getFirstKey(data['finalisations']));
+					selectFinalisation(getFirstKey(data['finalisations']), null);
 				}
 				
 				$('.input-group').remove();
@@ -182,8 +182,11 @@ function changePage(page, nameid) {
 					}	
 				} , 1500));
 				
-				selectShipping(0);
-				selectInstallation(0);
+				$('#input-width-field').val(parseFloat(productData['default_width']).toFixed(productData['size_decimal']));
+				$('#input-height-field').val(parseFloat(productData['default_height']).toFixed(productData['size_decimal']));
+				
+				selectShipping(0, null);
+				selectInstallation(0, null);
 				updatePriceCalculation();
 
 
@@ -527,9 +530,9 @@ function calculatePrice(price_table) {
 			}
 		});
 		if (squaresize > max) {
-			return price_table[max];
+			return price_table[parseFloat(max).toFixed(2)];
 		} else if (squaresize < min) {
-			return price_table[min];
+			return price_table[parseFloat(min).toFixed(2)];
 		} else {
 			var lower = 0;
 			var greater = Infinity;
@@ -566,6 +569,7 @@ function getSquareSize() {
 function updatePriceCalculation() {
 	var squareSize = getSquareSize();
 	$('#product-size').text(squareSize);
+	refreshInstallation();
 	
 	if(squareSize > parseFloat(productData['max_size'])){
 		$('#product-price-total').text("Cena na vyžiadanie");
@@ -603,7 +607,10 @@ function updatePriceCalculation() {
 			$('#product-finalisation').parent().show();
 		}
 		
-		var priceShipping = parseFloat($('#product-shipping').text()).toFixed(2);
+		var priceShipping = 0;
+		if($.isNumeric($('#product-shipping').text())){
+			priceShipping = parseFloat($('#product-shipping').text()).toFixed(2);
+		}
 	
 		var totalPrice = (squareSize * pricePerSquare + priceInstallation + priceFinalisation).toFixed(2);
 		$('#product-price-piece').text(totalPrice);
@@ -682,16 +689,23 @@ function openPopup(data, fullscreen, menu) {
 	$('body').addClass('popup');
 }
 
-function closePopup(data) {
-	$('#popup').fadeOut(500);
+function closePopup(delay) {
+	$('#popup').delay(delay).fadeOut(500);
 	$('body').css('overflow', 'scroll');
 }
 
 function openMaterialSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Druh Materiálu</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['materials'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box href-box" onClick="selectMaterial(' + value['id'] + ');"><div class="box-content" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box href-box" onClick="selectMaterial(' + value['id'] + ', this);"><div class="box-content" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
+
+	data += '</div>';
+	openPopup(data, 0, 0);
+}
+
+function openAttachFile() {
+	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Prílohy objednávky</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 
 	data += '</div>';
 	openPopup(data, 0, 0);
@@ -734,7 +748,7 @@ function toggleInspirationId(id) {
 function openFinalisationSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Finalizácia</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['finalisations'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box href-box" onClick="selectFinalisation(' + value['id'] + ');"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box href-box" onClick="selectFinalisation(' + value['id'] + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
 
 	data += '</div>';
@@ -743,21 +757,22 @@ function openFinalisationSelection() {
 
 function openFilterSelection(attribute) {
 	var data = '<div class="row">';
-	data += '<div class="col-sm-3 popup-box box" onClick="selectFilter(\'' + attribute + '\',\'Všetko\');" id="filter-vsetko"><div class="box-content box-content-center" style="background-image: url(/img/filters/all.png);">Všetko</div></div>';
+	data += '<div class="col-sm-3 popup-box box" onClick="selectFilter(\'' + attribute + '\',\'Všetko\', this);" id="filter-vsetko"><div class="box-content box-content-center" style="background-image: url(/img/filters/all.png);">Všetko</div></div>';
 	$.each(filters[attribute], function (index, value) {
 		filter = value.split(':');
-		data += '<div class="col-sm-3 popup-box box" onClick="selectFilter(\'' + attribute + '\',\'' + filter[0] + '\');" id="filter-' + filter[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() + '"><div class="box-content box-content-center" style="background-image: url(/img/filters/' + filter[1] + ');">' + filter[0] + '</div></div>';
+		data += '<div class="col-sm-3 popup-box box" onClick="selectFilter(\'' + attribute + '\',\'' + filter[0] + '\', this);" id="filter-' + filter[0].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() + '"><div class="box-content box-content-center" style="background-image: url(/img/filters/' + filter[1] + ');">' + filter[0] + '</div></div>';
 	});
 
 	data += '</div>';
 	openPopup(data, 0, 0);
 }
 
-function selectFilter(attribute, filter) {
+function selectFilter(attribute, filter, element) {
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #884D87');
 	$('#popup #filter-' + filter.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase()).css('border-color', '#8B2573');
 
 	setTimeout(function () {
-		closePopup();
+		closePopup(1000);
 	}, 500);
 
 	if (filter == "Všetko") {
@@ -815,11 +830,13 @@ function selectFilter(attribute, filter) {
 
 function resetFilterSelection() {
 	$.each(Object.keys(filters), function (key, value) {
-		selectFilter(value, "Všetko");
+		selectFilter(value, "Všetko", null);
 	});
 }
 
-function selectMaterial(id) {
+function selectMaterial(id, element) {
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #' + productData['color']);
+	
 	var selected_material = productData['materials'][id];
 	var material_price = calculatePrice(selected_material['prices']);
 	$('#product-material-value').text(selected_material['name']);
@@ -828,10 +845,11 @@ function selectMaterial(id) {
 	$('#material-price').val(material_price);
 	updatePriceCalculation();
 	productData['selected-material'] = id;
-	closePopup();
+	closePopup(1000);
 }
 
-function selectFinalisation(id) {
+function selectFinalisation(id, element) {
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #' + productData['color']);
 	var selected_finalisation = productData['finalisations'][id];
 
 	var finalisation_price = 0;
@@ -852,16 +870,24 @@ function selectFinalisation(id) {
 
 	productData['selected-finalisation'] = id;
 	updatePriceCalculation();
+	closePopup(1000);
 }
 
-function selectShipping(index) {
+function selectShipping(index, element) {
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #' + productData['color']);
 	shipping = productData['shippings'][index];
 	shippingLabel = shipping['name'];
 	if (shipping['price'] > 0) {
 		shippingLabel += ' (+' + shipping['price'] + '€)'
 	}
 	$('#product-shipping-group label small').text(shippingLabel);
-	$('#product-shipping').text(shipping['price']);
+	if(shipping['price'] == null){
+		$('#product-shipping').text('Podľa dohody');
+		$('#product-shipping').removeClass('numeric');
+	}else{
+		$('#product-shipping').text(shipping['price']);
+		$('#product-shipping').addClass('numeric');
+	}
 
 	if (shipping['price'] == 0) {
 		$('#product-shipping').parent().hide();
@@ -871,14 +897,19 @@ function selectShipping(index) {
 
 	updatePriceCalculation();
 	productData['selected-shipping'] = shipping['id'];
-	closePopup();
+	closePopup(1000);
 }
 
-function selectInstallation(requested) {
-	prices = productData['installation_prices'];
+function selectInstallation(requested, element) {
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #' + productData['color']);
+	productData['installation'] = requested;
+	updatePriceCalculation();
+	closePopup(1000);
+}
 
-	if (requested) {
-		price = calculatePrice(productData['installation_prices'])
+function refreshInstallation(){
+	if (productData['installation']) {
+		price = calculatePrice(productData['installation_prices']).toFixed(2);
 		$('#product-installation-group label small').text('Áno (+' + price + '€/m2)');
 		$('#product-installation').text(price);
 		$('#product-installation').parent().show();
@@ -887,9 +918,6 @@ function selectInstallation(requested) {
 		$('#product-installation').text(0);
 		$('#product-installation').parent().hide();
 	}
-
-	updatePriceCalculation();
-	closePopup();
 }
 
 function openAdditionalInfo() {
@@ -899,8 +927,8 @@ function openAdditionalInfo() {
 
 function openInstallationSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Inštalácia</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
-	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(0);"><div class="box-content box-content-center" style="background-image: url(/img/installation-no.png);"></div></div>';
-	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(1);"><div class="box-content box-content-center" style="background-image: url(/img/installation-yes.png);"></div></div>';
+	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(0, this);"><div class="box-content box-content-center" style="background-image: url(/img/installation-no.png);"></div></div>';
+	data += '<div class="col-sm-3 popup-box" onClick="selectInstallation(1, this);"><div class="box-content box-content-center" style="background-image: url(/img/installation-yes.png);"></div></div>';
 	data += '</div>';
 	openPopup(data, 0, 0);
 }
@@ -928,7 +956,7 @@ function openOrderForm() {
 	data += '<hr /><h2>Doplňujúce informácie</h2>';
 	data += '<div class="form-group row"><div class="col-sm-12"><textarea name="additional-info" class="form-control" rows="3"></textarea></div></div>';
 	data += '<hr />';
-	data += '<div class="form-group row"><div class="col-sm-12 text-center"><input type="submit" class="btn-color btn-center" value="Odoslať" /><input type="button" class="btn-color btn-center" onClick="closePopup();" value="Zrušiť" /></div></div>';
+	data += '<div class="form-group row"><div class="col-sm-12 text-center"><input type="submit" class="btn-color btn-center" value="Odoslať" /><input type="button" class="btn-color btn-center" onClick="closePopup(1000);" value="Zrušiť" /></div></div>';
 	data += '</form></div></div>';
 	openPopup(data, 0, 0);
 
@@ -974,7 +1002,7 @@ function openOrderForm() {
 					console.log(data);
 					$('#order-button span').removeClass("icon-cart");
 					$('#order-button span').addClass("icon-checkmark");
-					closePopup();
+					closePopup(1000);
 				}
 			});
 		}
@@ -1038,7 +1066,7 @@ function isPsc(psc) {
 function openShippingSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Doprava</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['shippings'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box" onClick="selectShipping(' + index + ');"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box" onClick="selectShipping(' + index + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
 
 	data += '</div>';
@@ -1076,9 +1104,9 @@ $(window).resize(function () {
 function openPopupMenu() {
 	var data = '<div class="row"><div class="col-sm-12 text-center"><h1>Prajete si opustiť stránku?</h1></div></div>';
 	data += '<div class="row">';
-	data += '<div class="col-sm-3 popup-box box href-box" onClick="history.pushState(null, null, null);closePopup();"><div class="box-content box-content-center" style="background-color: #C41C72; color: #fff;">Zostať</div></div>';
-	data += '<div class="col-sm-3 popup-box box href-box" onClick="changePage(\'domov\',\'\');closePopup();"><div class="box-content box-content-center" style="background-color: #8B2573; color: #fff;">Domov</div></div>';
-	data += '<div class="col-sm-3 popup-box box href-box" onClick="changePage(\'kontakt\',\'\');closePopup();"><div class="box-content box-content-center" style="background-color: #414042; color: #fff;">Kontakt</div></div>';
+	data += '<div class="col-sm-3 popup-box box href-box" onClick="history.pushState(null, null, null);closePopup(1000);"><div class="box-content box-content-center" style="background-color: #C41C72; color: #fff;">Zostať</div></div>';
+	data += '<div class="col-sm-3 popup-box box href-box" onClick="changePage(\'domov\',\'\');closePopup(1000);"><div class="box-content box-content-center" style="background-color: #8B2573; color: #fff;">Domov</div></div>';
+	data += '<div class="col-sm-3 popup-box box href-box" onClick="changePage(\'kontakt\',\'\');closePopup(1000);"><div class="box-content box-content-center" style="background-color: #414042; color: #fff;">Kontakt</div></div>';
 	data += '<div class="col-sm-3 popup-box box href-box" onClick="history.back();"><div class="box-content box-content-center" style="background-color: #006199; color: #fff;">Opustiť</div></div>';
 	data += '</div>';
 	openPopup(data, 0, 1);
