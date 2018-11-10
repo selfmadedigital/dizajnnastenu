@@ -244,6 +244,7 @@ function changePage(page, nameid) {
 				$.ajax({
 						type: "GET",
 						dataType: "json",
+						async: false,
 						url: "/inc/inspiration.php?filter_product=" + productData['name'],
 						success: function (data) {
 							var inspiration = data[Math.floor(Math.random() * data.length)]
@@ -373,6 +374,7 @@ function changePage(page, nameid) {
 					$.ajax({
 						type: "GET",
 						dataType: "json",
+						async: false,
 						url: "/inc/inspiration.php" + filter,
 						success: function (data) {
 							var inspiration = data[Math.floor(Math.random() * data.length)]
@@ -417,16 +419,21 @@ function changePage(page, nameid) {
 }
 
 function resizeBox(element) {
+	if(element.outerWidth() == 0){
+		$(element).outerWidth($(element).parent().outerWidth()/4);
+	}
+	
 	if (element.hasClass('col-sm-8') || element.hasClass('box-menu') || element.hasClass('double-column')) {
 		height = element.outerWidth() / 2;
 	} else if (element.hasClass('triple-column')) {
 		height = element.outerWidth() / 3;
 	} else {
 		height = element.outerWidth();
+		console.log(height);
 	}
 
 	fontSize = height / 8;
-
+	
 	element.css('height', height + 'px');
 	if (element.hasClass('box-menu')) {
 		element.find('h1').css('font-size', fontSize * 1.5 + 'px');
@@ -456,37 +463,15 @@ function resizeBox(element) {
 }
 
 function adjustResolution() {
-	$('.subpage.active .box').each(function (i) {
-		resizeBox($(this));
-	});
-
 	var container = $('#main-container');
 	container.css('max-width', window.innerHeight - 50 + 'px');
-	
-	if (!$('#popup-container').hasClass('fullscreen')) {
-		$('#popup-container').css('width', $('#main-container').outerWidth() * 1.2);
-		if ($('#popup-container').outerHeight() < window.innerHeight) {
-			$('#popup-container').css('top', 'calc(50% - ' + $('#popup-container').outerHeight() / 2 + 'px)');
-		} else {
-			$('#popup-container').css('top', '0');
-		}
-		$('#popup-container').css('left', 'calc(50% - ' + $('#popup-container').outerWidth() / 2 + 'px)');
-
-		$('#popup-close').css('left', $('#popup-container').position().left + $('#popup-container').outerWidth() - 28 + 'px');
-		$('#popup-close').css('top', $('#popup-container').position().top + 10 + 'px');
-	} else {
-		$('#popup-container').css('top', '');
-		$('#popup-container').css('left', '');
-		$('#popup-container').css('width', '');
-		$('#popup-close').css('top', '');
-		$('#popup-close').css('left', '');
-	}
+	var success = true;
 
 	$('.subpage.active .box').each(function (i) {
 		resizeBox($(this));
 	});
 
-	$('#popup .popup-box').each(function (i) {
+	$('#popup-modal .popup-box').each(function (i) {
 		resizeBox($(this));
 	});
 
@@ -500,13 +485,16 @@ function adjustResolution() {
 
 	$('.fullscreen-arrows').css('font-size', $('.fullscreen-arrows').parent().width() / 20 + 'px');
 
-	$('#popup h1').css('font-size', $('#popup h1').parent().width() / 20 + 'px');
+	$('#popup-modal h1').css('font-size', $('#popup-modal h1').parent().width() / 20 + 'px');
+	$('#popup-modal #menu-header').css('font-size', $('#popup-modal h1').parent().width() / 30 + 'px');
 
-	if ($('#popup-container').hasClass('menu')) {
+	if ($('#popup-modal').hasClass('menu')) {
 		$('#popup-close').css('visibility', 'hidden');
 	} else {
 		$('#popup-close').css('visibility', 'visible');
 	}
+	
+	return success;
 }
 
 function calculatePrice(price_table) {
@@ -563,13 +551,14 @@ function getSquareSize() {
 	if(productData['size_unit'] == 'cm'){
 		squareSize = squareSize / 10000;
 	}
-	return squareSize;
+	return parseFloat(squareSize).toFixed(2);
 }
 
 function updatePriceCalculation() {
 	var squareSize = getSquareSize();
 	$('#product-size').text(squareSize);
 	refreshInstallation();
+	refreshFinalisation();
 	
 	if(squareSize > parseFloat(productData['max_size'])){
 		$('#product-price-total').text("Cena na vyžiadanie");
@@ -590,14 +579,14 @@ function updatePriceCalculation() {
 		if ($('#material-price').val().length > 0) {
 			pricePerSquare = (parseFloat(pricePerSquare) + parseFloat($('#material-price').val())).toFixed(2);
 		}
-		var priceInstallation = squareSize * parseFloat($('#product-installation').text());
+		var priceInstallation = parseFloat($('#product-installation').text());
 	
 		var priceFinalisation = 0;
 		if(parseFloat($('#product-finalisation span').text()) > 0){
 			if(productData['finalisation_tableprice'] == '1'){
-				priceFinalisation = squaresize*parseFloat($('#product-finalisation span').text()).toFixed(2);
+				priceFinalisation = parseFloat($('#product-finalisation span').text()).toFixed(2);
 			}else{
-				priceFinalisation = squareSize*pricePerSquare/100*parseFloat($('#product-finalisation span').text()).toFixed();
+				priceFinalisation = parseFloat($('#product-finalisation span').text()).toFixed(2);
 			}
 		}
 		
@@ -612,7 +601,7 @@ function updatePriceCalculation() {
 			priceShipping = parseFloat($('#product-shipping').text()).toFixed(2);
 		}
 	
-		var totalPrice = (squareSize * pricePerSquare + priceInstallation + priceFinalisation).toFixed(2);
+		var totalPrice = parseFloat((squareSize * pricePerSquare) + parseFloat(priceInstallation) + parseFloat(priceFinalisation)).toFixed(2);
 		$('#product-price-piece').text(totalPrice);
 	
 		var quantity = parseInt($('#input-quantity').val());
@@ -645,59 +634,51 @@ function updatePriceCalculation() {
 }
 
 function openPopup(data, fullscreen, menu) {
-	var scrollPosition = [
-		self.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft,
-		self.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-	];
-	
 	if (fullscreen) {
-		$('#popup-container').addClass('fullscreen');
+		$('#popup-modal').addClass('fullscreen');
 	} else {
-		$('#popup-container').removeClass('fullscreen');
+		$('#popup-modal').removeClass('fullscreen');
 	}
 
 	if (menu) {
-		$('#popup-container').addClass('menu');
+		$('#popup-modal').addClass('menu');
 	} else {
-		$('#popup-container').removeClass('menu');
+		$('#popup-modal').removeClass('menu');
 	}
-
-	$('#popup-container').html('<div id="popup-data" class="container">' + data + '</div>');
-
-	$('#popup').css('left', scrollPosition[0]);
-	$('#popup').css('top', scrollPosition[1] - 3);
-	$('#popup').fadeIn(500);
-	$('body').css('overflow', 'hidden');
-
-	$('#popup-container button').each(function (i) {
+	
+	$("#popup-modal-body").html('<div class="container">' + data + '</div>');
+	
+	$('#popup-modal-body button').each(function (i) {
 		if ($(this).attr('id') == 'popup-close') {
 			$(this).css('color', '#' + productData['color']);
 		} else {
 			$(this).css('background-color', '#' + productData['color']);
 		}
 	});
-
-	$('#popup-container .btn-color').each(function (i) {
+	
+	$('#popup-modal-body .btn-color').each(function (i) {
 		$(this).css('background-color', '#' + productData['color']);
 	});
-
-	$('#popup .popup-box').each(function (i) {
-		resizeBox($(this));
-	});
-
-	adjustResolution();
+	
 	$('body').addClass('popup');
+	
+	$("#popup-modal").modal();
+	adjustResolution();
 }
 
 function closePopup(delay) {
-	$('#popup').delay(delay).fadeOut(500);
+	$('#popup-modal').modal('hide');
 	$('body').css('overflow', 'scroll');
 }
 
 function openMaterialSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Druh Materiálu</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['materials'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box href-box" onClick="selectMaterial(' + value['id'] + ', this);"><div class="box-content" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box href-box';
+		if(value['id'] == productData['selected-material']){
+			data += ' selected';
+		}
+		data += '" onClick="selectMaterial(' + value['id'] + ', this);"><div class="box-content" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
 
 	data += '</div>';
@@ -716,6 +697,7 @@ function openInspirationsPopup() {
 		type: "POST",
 		dataType: "json",
 		url: "/inc/inspiration.php",
+		async: false,
 		success: function (data) {
 			var popupData = '<div class="row">';
 			$.each(data, function (key, value) {
@@ -748,7 +730,11 @@ function toggleInspirationId(id) {
 function openFinalisationSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Finalizácia</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['finalisations'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box href-box" onClick="selectFinalisation(' + value['id'] + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box href-box'
+		if(value['id'] == productData['selected-finalisation']){
+			data += ' selected';
+		}
+		data += '" onClick="selectFinalisation(' + value['id'] + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
 
 	data += '</div>';
@@ -849,28 +835,39 @@ function selectMaterial(id, element) {
 }
 
 function selectFinalisation(id, element) {
-	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 2px #' + productData['color']);
-	var selected_finalisation = productData['finalisations'][id];
-
-	var finalisation_price = 0;
-	var finalisation_type = '';
-	if (productData['finalisation_tableprice'] == '1') {
-		finalisation_price = calculatePrice(selected_finalisation['prices']);
-		finalisation_type = '€/m2';
-	} else {
-		finalisation_price = selected_finalisation['percentage'];
-		finalisation_type = '%';
-	}
-
-	finalisation_label = selected_finalisation['name'];
-	finalisation_label += ' (+' + finalisation_price + finalisation_type + ')';
-	
-	$('#product-finalisation-group label small').text(finalisation_label);
-	$('#product-finalisation').html('<span>' + parseInt($('#product-price').text())/100*parseFloat(selected_finalisation['percentage']) + '</span> €');
-
+	$(element).find('.box-content').css('box-shadow', 'inset 0 0 0 4px #' + productData['color']);
 	productData['selected-finalisation'] = id;
 	updatePriceCalculation();
 	closePopup(1000);
+}
+
+function refreshFinalisation(){
+	if(productData['selected-finalisation'] > 0){ 
+		var selected_finalisation = productData['finalisations'][productData['selected-finalisation']];
+		if(selected_finalisation !== undefined){
+			var finalisation_price = 0;
+			var finalisation_type = '';
+			if (productData['finalisation_tableprice'] == '1') {
+				finalisation_price = calculatePrice(selected_finalisation['prices']).toFixed(2);
+				finalisation_type = '€/m2';
+			} else {
+				finalisation_price = selected_finalisation['percentage'];
+				finalisation_type = '%';
+			}
+		
+			finalisation_label = selected_finalisation['name'];
+			if(finalisation_price > 0){
+				finalisation_label += ' (+' + finalisation_price + finalisation_type + ')';
+			}
+			
+			$('#product-finalisation-group label small').text(finalisation_label);
+			if (productData['finalisation_tableprice'] == '1') {
+				$('#product-finalisation').html('<span>' + (parseFloat($('#product-size').text())*parseFloat(finalisation_price)).toFixed(2) + '</span> €');
+			}else{
+				$('#product-finalisation').html('<span>' + (parseFloat($('#product-size').text())*parseFloat($('#product-price').text())/100*parseFloat(finalisation_price)).toFixed(2) + '</span> €');
+			}
+		}
+	}
 }
 
 function selectShipping(index, element) {
@@ -911,7 +908,7 @@ function refreshInstallation(){
 	if (productData['installation']) {
 		price = calculatePrice(productData['installation_prices']).toFixed(2);
 		$('#product-installation-group label small').text('Áno (+' + price + '€/m2)');
-		$('#product-installation').text(price);
+		$('#product-installation').text(price * getSquareSize());
 		$('#product-installation').parent().show();
 	} else {
 		$('#product-installation-group label small').text('Nie');
@@ -998,8 +995,8 @@ function openOrderForm() {
 				type: "POST",
 				url: "/inc/order.php",
 				data: orderdata,
+				async: false,
 				success: function (data) {
-					console.log(data);
 					$('#order-button span').removeClass("icon-cart");
 					$('#order-button span').addClass("icon-checkmark");
 					closePopup(1000);
@@ -1066,7 +1063,11 @@ function isPsc(psc) {
 function openShippingSelection() {
 	var data = '<div class="row"><div class="col-sm-3 popup-box"><div class="box-content box-content-center" style="color: #fff; background-color: #' + productData['color'] + ';">Doprava</div></div><div class="col-sm-9 popup-box triple-column"><div class="box-content">ipsum</div></div></div><div class="row">';
 	$.each(productData['shippings'], function (index, value) {
-		data += '<div class="col-sm-3 popup-box" onClick="selectShipping(' + index + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
+		data += '<div class="col-sm-3 popup-box';
+		if(value['id'] == productData['selected-shipping']){
+			data += ' selected';
+		}
+		data += '" onClick="selectShipping(' + index + ', this);"><div class="box-content box-content-center" style="background-image: url(/img/' + value['img'] + ');"></div></div>';
 	});
 
 	data += '</div>';
@@ -1102,7 +1103,7 @@ $(window).resize(function () {
 });
 
 function openPopupMenu() {
-	var data = '<div class="row"><div class="col-sm-12 text-center"><h1>Prajete si opustiť stránku?</h1></div></div>';
+	var data = '<div class="row"><div class="col-sm-12 text-center"><h1 id="menu-header">Prajete si opustiť stránku?</h1></div></div>';
 	data += '<div class="row">';
 	data += '<div class="col-sm-3 popup-box box href-box" onClick="history.pushState(null, null, null);closePopup(1000);"><div class="box-content box-content-center" style="background-color: #C41C72; color: #fff;">Zostať</div></div>';
 	data += '<div class="col-sm-3 popup-box box href-box" onClick="changePage(\'domov\',\'\');closePopup(1000);"><div class="box-content box-content-center" style="background-color: #8B2573; color: #fff;">Domov</div></div>';
@@ -1155,4 +1156,17 @@ function pad(str, max) {
 
 $('body.popup').bind('touchmove', function (e) {
 	e.preventDefault();
+});
+
+$(window).on('shown.bs.modal', function() { 
+    $('#popup-modal').modal('show');
+    $('#popup-modal .modal-dialog').outerWidth($('#main-container').outerWidth() * 1.2);
+    $('#popup-modal .modal-dialog').css('max-width',$('#main-container').outerWidth() * 1.2 + 'px');
+    adjustResolution();
+});
+
+$('#popup-modal').on('hidden.bs.modal', function() {
+    $(this).delay(3000).hide(0, function() {
+        $(this).modal('hide');
+    });
 });

@@ -19,5 +19,6 @@ exports.ROUTES = [
     { path: 'user/passwordchange', title: 'Používateľ', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
     { path: 'users/list', title: 'Užívatelia', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
     { path: 'files/list', title: 'Súbory', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
+    { path: 'quotes/list', title: 'Citáty', menuType: sidebar_metadata_1.MenuType.LEFT, icon: 'material-icons' },
 ];
 //# sourceMappingURL=sidebar-routes.config.js.map

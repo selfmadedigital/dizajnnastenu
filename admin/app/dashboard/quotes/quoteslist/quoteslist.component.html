@@ -1,0 +1,36 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-icon" data-background-color="rose">
+                        <i class="material-icons">format_indent_increase</i>
+                    </div>
+                    <div class="card-content">
+                        <h4 class="card-title">Citáty</h4>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Citát</th>
+                                        <th class="text-right">Akcie</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let quote of quotes" id="{{quote.id}}">
+                                        <td>{{quote.quote}}</td>
+                                        <td class="td-actions text-right">
+                                            <button type="button" rel="tooltip" class="btn btn-danger" (click)="removeQuote(quote.id)">
+                                               <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

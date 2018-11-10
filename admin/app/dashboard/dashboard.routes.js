@@ -17,6 +17,7 @@ var shippingsedit_component_1 = require('./shippings/shippingsedit/shippingsedit
 var shippingsnew_component_1 = require('./shippings/shippingsnew/shippingsnew.component');
 var userslist_component_1 = require('./users/userslist/userslist.component');
 var passwordchange_component_1 = require('./users/passwordchange/passwordchange.component');
+var quoteslist_component_1 = require('./quotes/quoteslist/quoteslist.component');
 var fileslist_component_1 = require('./files/fileslist/fileslist.component');
 //
 exports.MODULE_ROUTES = [
@@ -39,6 +40,7 @@ exports.MODULE_ROUTES = [
     { path: 'users/list', component: userslist_component_1.UsersListComponent },
     { path: 'users/passwordchange', component: passwordchange_component_1.PasswordChangeComponent },
     { path: 'files/list/:category', component: fileslist_component_1.FilesListComponent },
+    { path: 'quotes/list', component: quoteslist_component_1.QuotesListComponent },
 ];
 //
 exports.MODULE_COMPONENTS = [
@@ -60,5 +62,6 @@ exports.MODULE_COMPONENTS = [
     userslist_component_1.UsersListComponent,
     passwordchange_component_1.PasswordChangeComponent,
     fileslist_component_1.FilesListComponent,
+    quoteslist_component_1.QuotesListComponent,
 ];
 //# sourceMappingURL=dashboard.routes.js.map

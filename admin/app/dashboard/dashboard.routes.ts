@@ -25,6 +25,8 @@ import { ShippingsNewComponent } from './shippings/shippingsnew/shippingsnew.com
 import { UsersListComponent } from './users/userslist/userslist.component';
 import { PasswordChangeComponent } from './users/passwordchange/passwordchange.component';
 
+import { QuotesListComponent } from './quotes/quoteslist/quoteslist.component';
+
 import { FilesListComponent } from './files/fileslist/fileslist.component';
 //
 export const MODULE_ROUTES: Route[] =[
@@ -55,6 +57,8 @@ export const MODULE_ROUTES: Route[] =[
     { path: 'users/passwordchange', component: PasswordChangeComponent },
     
     { path: 'files/list/:category', component: FilesListComponent },
+    
+    { path: 'quotes/list', component: QuotesListComponent },
 ]
 //
 export const MODULE_COMPONENTS = [
@@ -84,4 +88,6 @@ export const MODULE_COMPONENTS = [
     PasswordChangeComponent,
     
     FilesListComponent,
+    
+    QuotesListComponent,
 ]

@@ -230,6 +230,10 @@ button,
 	cursor: pointer;
 }
 
+.controls-container{
+	padding-right: 14px;
+}
+
 .box-menu h1 {
 	color: #fff;
 }
@@ -463,6 +467,10 @@ input[type="file"] {
 	overflow: hidden;
 }
 
+#product-short-information p>span, #product-description p>span{
+	font-size: inherit !important;
+}
+
 #product-operands .row {
 	margin-bottom: 3px;
 }
@@ -501,7 +509,7 @@ input[type="file"] {
 }
 
 #product-installation:after {
-	content: " € / m\00b2";
+	content: " €";
 }
 
 #product-shipping.numeric:after {
@@ -545,33 +553,22 @@ input[type="file"] {
 	left: 15px
 }
 
-#popup {
-	width: 100vw;
-	height: 100vh;
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 99;
-}
-
-#popup-overlay {
-	width: 100%;
-	height: 100%;
-	background: rgba(0, 0, 0, 0.5);
-}
-
 #popup-close {
 	position: fixed;
-	top: 15px;
-	right: 11px;
-	color: #8b2573;
-	background: transparent;
-	z-index: 100;
-	padding: 0;
-	font-size: 14px;
+    top: 10px;
+    right: 4px;
+    color: #8b2573;
+    background: transparent;
+    z-index: 100;
+    padding: 0;
+    font-size: 10px;
 }
 
-#popup-container.fullscreen + #popup-close{
+#popup-modal{
+	height: 100%;
+}
+
+#popup-modal.fullscreen + #popup-close{
 	padding: 5px;
     background: rgba(255,255,255,0.5);
     border-radius: 3px;
@@ -586,27 +583,32 @@ input[type="file"] {
 	overflow: scroll;
 }
 
-#popup-data {
-	position: relative;
-	padding: 15px 25px 0 25px;
-}
-
-#popup-container.fullscreen {
+#popup-modal.fullscreen .modal-dialog{
 	max-width: 100%;
 	max-height: 100%;
-	width: 100vw;
+	width: 100vw !important;
 	height: 100vh;
 	background: rgba(255, 255, 255, 0.5);
 	overflow-x: hidden;
 	top: 0;
 	left: 0;
+	margin: 0;
 }
 
-#popup-container.fullscreen #popup-data {
+#popup-modal.fullscreen .modal-dialog .modal-content{
+	background: transparent;	
+}
+
+#popup-modal.fullscreen #popup-modal-body{
 	padding: 0;
+}
+
+#popup-modal.fullscreen #popup-modal-body .popup-box{
+	padding: 0;
+}
+
+#popup-modal.fullscreen #popup-modal-body .container{
 	margin: 0;
-	max-width: 100%;
-	height: 100%;
 }
 
 .box-meta {
@@ -635,6 +637,10 @@ input[type="file"] {
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
+}
+
+.popup-box.selected .box-content{
+	box-shadow: inset 0 0 0 2px red;
 }
 
 .popup-box .box-content {
@@ -748,4 +754,33 @@ input[type="file"] {
 	#popup-close {
 		display: none;
 	}
+}
+
+
+.modal-content{
+	border-radius: 0;
+	border: 0;
+}
+
+.modal {
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px; /* Adjusts for spacing */
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+#popup-modal-body{
+	padding: 0.4rem;
 }

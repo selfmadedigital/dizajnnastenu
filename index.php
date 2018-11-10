@@ -15,6 +15,15 @@
     
   </head>
   <body>
+  	<!-- Modal -->
+	<div class="modal fade" id="popup-modal" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<button id="popup-close" class="icon-cross" onclick="closePopup();"></button>
+				<div class="modal-body" id="popup-modal-body"></div>
+			</div>
+		</div>
+	</div>
   	<div id="popup" style="display: none;">
   		<div id="popup-overlay"></div>
   		<div id="popup-container"></div>

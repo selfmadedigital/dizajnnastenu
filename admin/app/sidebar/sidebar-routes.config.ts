@@ -27,4 +27,6 @@ export const ROUTES: RouteInfo[] = [
     
     { path: 'users/list', title: 'Užívatelia', menuType: MenuType.LEFT, icon: 'material-icons' },
     { path: 'files/list', title: 'Súbory', menuType: MenuType.LEFT, icon: 'material-icons' },
+    
+    { path: 'quotes/list', title: 'Citáty', menuType: MenuType.LEFT, icon: 'material-icons' },
 ];
